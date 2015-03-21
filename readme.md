@@ -10,7 +10,7 @@ To date, development has been done against Adobe ColdFusion 11, in particular gi
 
 ## Testing
 
-You are expected to have TestBox installed. (A mapping to `/testbox` should be sufficient.) Then just navigate to `tests.cfc?method=runRemote` in your browser.
+It is assumed that you have [TestBox](http://wiki.coldbox.org/wiki/TestBox.cfm) installed. (A mapping to `/testbox` should be sufficient.) Then just navigate to `tests.cfc?method=runRemote` in your browser.
 
 ## More docs to come...
 

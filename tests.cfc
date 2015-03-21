@@ -190,7 +190,7 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'milliseconds').getDateTime() ).toBe( compare2 );
 					expect( test2.add(1, 'millisecond').getDateTime() ).toBe( compare2 );
-					expect( test3.add(1, 'l').getDateTime() ).toBe( compare2 );
+					expect( test3.add(1, 'ms').getDateTime() ).toBe( compare2 );
 				});
 
 			});
@@ -324,7 +324,7 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'milliseconds').getDateTime() ).toBe( compare2 );
 					expect( test2.subtract(1, 'millisecond').getDateTime() ).toBe( compare2 );
-					expect( test3.subtract(1, 'l').getDateTime() ).toBe( compare2 );
+					expect( test3.subtract(1, 'ms').getDateTime() ).toBe( compare2 );
 				});
 
 			});
@@ -416,10 +416,10 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.diff( new moment(base), 'ww' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'weeks' ) ).toBe( dateDiff( 'ww', base, pushA ) );
 					expect( test1.diff( test2, 'week'  ) ).toBe( dateDiff( 'ww', base, pushA ) );
-					expect( test1.diff( test2, 'ww'    ) ).toBe( dateDiff( 'ww', base, pushA ) );
+					expect( test1.diff( test2, 'w'     ) ).toBe( dateDiff( 'ww', base, pushA ) );
 					expect( test1.diff( test3, 'weeks' ) ).toBe( dateDiff( 'ww', base, pushB ) );
 					expect( test1.diff( test3, 'week'  ) ).toBe( dateDiff( 'ww', base, pushB ) );
-					expect( test1.diff( test3, 'ww'    ) ).toBe( dateDiff( 'ww', base, pushB ) );
+					expect( test1.diff( test3, 'w'     ) ).toBe( dateDiff( 'ww', base, pushB ) );
 				});
 
 				it("works for months, month, m", function(){
@@ -467,10 +467,10 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.diff( new moment(base), 'w' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'weekdays' ) ).toBe( dateDiff( 'w', base, pushA ) );
 					expect( test1.diff( test2, 'weekday'  ) ).toBe( dateDiff( 'w', base, pushA ) );
-					expect( test1.diff( test2, 'w'        ) ).toBe( dateDiff( 'w', base, pushA ) );
+					expect( test1.diff( test2, 'wd'       ) ).toBe( dateDiff( 'w', base, pushA ) );
 					expect( test1.diff( test3, 'weekdays' ) ).toBe( dateDiff( 'w', base, pushB ) );
 					expect( test1.diff( test3, 'weekday'  ) ).toBe( dateDiff( 'w', base, pushB ) );
-					expect( test1.diff( test3, 'w'        ) ).toBe( dateDiff( 'w', base, pushB ) );
+					expect( test1.diff( test3, 'wd'       ) ).toBe( dateDiff( 'w', base, pushB ) );
 				});
 
 				it("works for hours, hour, h", function(){
@@ -532,13 +532,13 @@ component extends="testbox.system.BaseSpec"{
 					var test2 = new moment( pushA );
 					var test3 = new moment( pushB );
 
-					expect( test1.diff( new moment(base), 'l' ) ).toBe( 0 );
+					expect( test1.diff( new moment(base), 'ms' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'milliseconds' ) ).toBe( pushA.getTime() - base.getTime() );
 					expect( test1.diff( test2, 'millisecond'  ) ).toBe( pushA.getTime() - base.getTime() );
-					expect( test1.diff( test2, 'l'            ) ).toBe( pushA.getTime() - base.getTime() );
+					expect( test1.diff( test2, 'ms'           ) ).toBe( pushA.getTime() - base.getTime() );
 					expect( test1.diff( test3, 'milliseconds' ) ).toBe( pushB.getTime() - base.getTime() );
 					expect( test1.diff( test3, 'millisecond'  ) ).toBe( pushB.getTime() - base.getTime() );
-					expect( test1.diff( test3, 'l'            ) ).toBe( pushB.getTime() - base.getTime() );
+					expect( test1.diff( test3, 'ms'           ) ).toBe( pushB.getTime() - base.getTime() );
 				});
 
 			});
@@ -547,7 +547,15 @@ component extends="testbox.system.BaseSpec"{
 
 		describe("QUERY", function(){});
 
-		describe("RETURNS & MISC", function(){});
+		describe("RETURNS & MISC", function(){
+
+			describe("getZoneTable()", function(){
+				var tbl = new moment().getZoneTable();
+				expect( tbl ).toBeStruct();
+				debug( tbl );
+			});
+
+		});
 
 	}
 

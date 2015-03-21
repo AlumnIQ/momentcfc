@@ -249,22 +249,22 @@ component displayname="moment" {
 			case "q":
 				if (!isDateCompare) return "q";
 				throw(message="DateCompare doesn't support Quarter precision");
-			case "weeks":
-			case "week":
-			case "ww":
-				if (!isDateCompare) return "ww";
-				throw(message="DateCompare doesn't support Week precision");
 			case "months":
 			case "month":
 			case "m":
 				return "m";
+			case "weeks":
+			case "week":
+			case "w":
+				if (!isDateCompare) return "ww";
+				throw(message="DateCompare doesn't support Week precision");
 			case "days":
 			case "day":
 			case "d":
 				return "d";
 			case "weekdays":
 			case "weekday":
-			case "w":
+			case "wd":
 				if (!isDateCompare) return "w";
 				throw(message="DateCompare doesn't support Weekday precision");
 			case "hours":
@@ -281,7 +281,7 @@ component displayname="moment" {
 				return "s";
 			case "milliseconds":
 			case "millisecond":
-			case "l":
+			case "ms":
 				if (isDateAdd) return "L";
 				if (isDateDiff) return "L"; //custom support for ms diffing is provided interally, because adobe sucks
 				throw(message="#method# doesn't support Millisecond precision");

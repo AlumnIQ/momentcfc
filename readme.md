@@ -2,7 +2,7 @@
 
 Inspired by moment.js, but not a strict port. With added Time Zone switchy goodness!
 
-<img src="http://fusiongrokker.com/demo/momentcfc/tests.cfc?method=runremote&reporter=testShield" />
+<a href="http://fusiongrokker.com/demo/momentcfc/tests.cfc?method=runremote"><img src="http://fusiongrokker.com/demo/momentcfc/tests.cfc?method=runremote&reporter=testShield" /></a>
 
 ### Compatibility
 

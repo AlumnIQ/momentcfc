@@ -75,6 +75,9 @@ component displayname="moment" {
 
 	public numeric function diff( b, part = 'seconds' ) hint="get the difference between the current date and the specified date" {
 		part = canonicalizeDatePart( part, 'dateDiff' );
+		if (part == "L"){ //custom support for millisecond diffing... because adobe couldn't be bothered to support it themselves
+			return b.epoch() - this.epoch();
+		}
 		return dateDiff( part, variables.utcTime, b.utc().getDateTime() );
 	}
 
@@ -280,6 +283,7 @@ component displayname="moment" {
 			case "millisecond":
 			case "l":
 				if (isDateAdd) return "L";
+				if (isDateDiff) return "L"; //custom support for ms diffing is provided interally, because adobe sucks
 				throw(message="#method# doesn't support Millisecond precision");
 		}
 		throw(message="Unrecognized Date Part: `#part#`");

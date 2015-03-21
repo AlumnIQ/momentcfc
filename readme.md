@@ -6,14 +6,14 @@ Inspired by moment.js, but not a strict port. With added Time Zone switchy goodn
 
 CFML is all about making complex things simple, but date-math seems to have missed this boat.
 
-| Adobe CF                                           | moment.cfc                                 |
-|----------------------------------------------------|--------------------------------------------|
-| `x = now();`                                       | `x = new moment();`                        |
-| `y = createDateTime( 2008, 11, 27, 6, 6, 0 );`     | `y = new moment( '2008-11-27 06:06:00' );` |
-| `x = dateAdd( 'ww', 1, x );`                       | `x.add( 1, 'week' );`                      |
-| `y = dateAdd( 'n', -30, y );`                      | `y.subtract( 30, 'minutes' );`             |
-| `diff = dateDiff( 's', x, y );`                    | `diff = x.diff( y, 'seconds' );`           |
-| `before = ( dateCompare( now(), x, 'h' ) == -1 );` | `before = x.isBefore( y, 'hours' );`       |
+| Adobe CF                                       | moment.cfc                                 |
+|------------------------------------------------|--------------------------------------------|
+| `x = now();`                                   | `x = new moment();`                        |
+| `y = createDateTime( 2008, 11, 27, 6, 6, 0 );` | `y = new moment( '2008-11-27 06:06:00' );` |
+| `x = dateAdd( 'ww', 1, x );`                   | `x.add( 1, 'week' );`                      |
+| `y = dateAdd( 'n', -30, y );`                  | `y.subtract( 30, 'minutes' );`             |
+| `diff = dateDiff( 's', x, y );`                | `diff = x.diff( y, 'seconds' );`           |
+| `before = dateCompare( now(), x, 'h' ) == -1;` | `before = x.isBefore( y, 'hours' );`       |
 
 But before we look at the syntax awesomeness of moment.cfc, let's take a quick moment to talk about...
 

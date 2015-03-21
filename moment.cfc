@@ -116,7 +116,7 @@ component displayname="moment" {
 		//Days
 		diff = dateDiff('d', L, R);
 		if (diff < 7){
-			return 'Last ' & dateFormat(L, 'dddd');
+			return 'Last ' & dateTimeFormat(L, 'EEEE');
 		}
 		//Weeks
 		diff = dateDiff('ww', L, R);

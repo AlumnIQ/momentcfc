@@ -45,7 +45,7 @@ component displayname="moment" {
 	}
 
 	public function add( amount, part ){
-		part = canonicalizeDatePart( part );
+		part = canonicalizeDatePart( part, 'dateAdd' );
 		variables.time = dateAdd( part, amount, variables.time );
 		variables.utcTime = TZtoUTC( variables.time, variables.zone );
 		return this;
@@ -74,7 +74,7 @@ component displayname="moment" {
 	}
 
 	public numeric function diff( b, part = 'seconds' ) hint="get the difference between the current date and the specified date" {
-		part = canonicalizeDatePart( part );
+		part = canonicalizeDatePart( part, 'dateDiff' );
 		return dateDiff( part, variables.utcTime, b.utc().getDateTime() );
 	}
 
@@ -143,22 +143,22 @@ component displayname="moment" {
 	//===========================================
 
 	public boolean function isBefore( compare, part = 'seconds' ) {
-		part = canonicalizeDatePart( part );
+		part = canonicalizeDatePart( part, 'dateCompare' );
 		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == -1);
 	}
 
 	public boolean function isSame( compare, part = 'seconds' ) {
-		part = canonicalizeDatePart( part );
+		part = canonicalizeDatePart( part, 'dateCompare' );
 		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == 0);
 	}
 
 	public boolean function isAfter( compare, part = 'seconds' ) {
-		part = canonicalizeDatePart( part );
+		part = canonicalizeDatePart( part, 'dateCompare' );
 		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == 1);
 	}
 
 	public boolean function isBetween( a, c, part = 'seconds' ) {
-		part = canonicalizeDatePart( part );
+		part = canonicalizeDatePart( part, 'dateCompare' );
 		return ( isBefore(c, part) && isAfter(a, part) );
 	}
 
@@ -231,16 +231,26 @@ component displayname="moment" {
 		return rep;
 	}
 
-	private function canonicalizeDatePart( part ){
+	private function canonicalizeDatePart( part, method = 'dateAdd' ){
+		var isDateAdd = (lcase(method) == "dateadd");
+		var isDateDiff = (lcase(method) == "datediff");
+		var isDateCompare = (lcase(method) == "datecompare");
+
 		switch( lcase(arguments.part) ){
 			case "years":
 			case "year":
 			case "y":
-				return "y";
+				return "yyyy";
 			case "quarters":
 			case "quarter":
 			case "q":
-				return "q";
+				if (!isDateCompare) return "q";
+				throw(message="DateCompare doesn't support Quarter precision");
+			case "weeks":
+			case "week":
+			case "ww":
+				if (!isDateCompare) return "ww";
+				throw(message="DateCompare doesn't support Week precision");
 			case "months":
 			case "month":
 			case "m":
@@ -252,11 +262,8 @@ component displayname="moment" {
 			case "weekdays":
 			case "weekday":
 			case "w":
-				return "w";
-			case "weeks":
-			case "week":
-			case "ww":
-				return "ww";
+				if (!isDateCompare) return "w";
+				throw(message="DateCompare doesn't support Weekday precision");
 			case "hours":
 			case "hour":
 			case "h":
@@ -272,9 +279,10 @@ component displayname="moment" {
 			case "milliseconds":
 			case "millisecond":
 			case "l":
-				return "L";
+				if (isDateAdd) return "L";
+				throw(message="#method# doesn't support Millisecond precision");
 		}
-		return "ERR";
+		throw(message="Unrecognized Date Part: `#part#`");
 	}
 
 }

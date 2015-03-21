@@ -59,6 +59,10 @@ component displayname="moment" {
 	//STATICS
 	//===========================================
 
+	public moment function clone() hint="returns a new instance with the same time & zone" {
+		return new moment( variables.time, variables.zone );
+	}
+
 	public moment function min( a, b ) hint="returns whichever moment came first" {
 		if ( a.isBefore( b ) ){
 			return a;

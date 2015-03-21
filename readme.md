@@ -94,7 +94,7 @@ Here's a list of all masks you can use with add/subtract:
 - Hours: `hours`, `hour`, `h`
 - Minutes: `minutes`, `minute`, `n`
 - Seconds: `seconds`, `second`, `s`
-- Milliseconds: `milliseconds`, `millisecond`, `ms` **\* \***
+- Milliseconds: `milliseconds`, `millisecond`, `ms` *\*
 
 **\* Deviation from the official dateAdd mask:** Adobe, in their infinite wisdom, decided to use `ww` for weeks and `w` for weekdays. Moment uses the sane alternative defined here.
 

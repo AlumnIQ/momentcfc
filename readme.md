@@ -9,7 +9,7 @@ CFML is all about making complex things simple, but date-math seems to have miss
 | Adobe CF                                       | moment.cfc                                 |
 |------------------------------------------------|--------------------------------------------|
 | `x = now();`                                   | `x = new moment();`                        |
-| `y = createDateTime( 2008, 11, 27, 6, 6, 0 );` | `y = new moment( '2008-11-27 06:06:00' );` |
+| `y = createDateTime( 2008, 11, 27, 6, 6, 0 );` | `y = new moment( '2008-11-27 13:47:00' );` |
 | `x = dateAdd( 'ww', 1, x );`                   | `x.add( 1, 'week' );`                      |
 | `y = dateAdd( 'n', -30, y );`                  | `y.subtract( 30, 'minutes' );`             |
 | `diff = dateDiff( 's', x, y );`                | `diff = x.diff( y, 'seconds' );`           |
@@ -23,9 +23,9 @@ In addition to all of the great date math you can do (with moment's better synta
 
 Create a timestamp in the US-Eastern time zone:
 
-	x = new moment( '2008-11-27 6:06:00', 'America/New_York' );
+	x = new moment( '2008-11-27 13:47:00', 'America/New_York' );
 
-When you don't pass a time zone argument, the current system time zone is used. When you don't pass a time argument, the current system time is used. `new moment()` and `new moment( '2008-11-27 6:06:00' )` and `new moment( '2008-11-27 6:06:00', 'America/New_York' )` are all equally valid.
+When you don't pass a time zone argument, the current system time zone is used. When you don't pass a time argument, the current system time is used. `new moment()` and `new moment( '2008-11-27 13:47:00' )` and `new moment( '2008-11-27 13:47:00', 'America/New_York' )` are all equally valid.
 
 Convert a moment's current time to UTC:
 
@@ -39,7 +39,7 @@ And get it back as a readable string:
 
 Or instead of UTC, let's see what time that would have been in Phoenix using the `.tz()` method:
 
-	new moment( '2008-11-27 6:06:00', 'America/New_York' ).tz( 'America/Phoenix' ).format( 'hh:nn' );
+	new moment( '2008-11-27 13:47:00', 'America/New_York' ).tz( 'America/Phoenix' ).format( 'hh:nn' );
 	//=> 03:06
 
 And yes, all of the above methods (constructor as well as `.utc()` and `.tz()`) are chainable.
@@ -98,7 +98,112 @@ Here's a list of all masks you can use with add/subtract:
 
 **\* Deviation from the official dateAdd mask:** Adobe, in their infinite wisdom, decided to use `ww` for weeks and `w` for weekdays. Moment uses the sane alternative defined here.
 
-**\* \* Another deviation from the official dateAdd mask:** `ms` just makes more sense than the `l` that Adobe uses.
+**\* \* Another deviation from the official dateAdd mask:** `ms` just makes more sense than the `l` (lower case L) that Adobe uses.
+
+#### Clone
+
+Returns a new moment instance with the same datetime and time zone.
+
+	now_ = new moment();
+	alsoNow = now_.clone();
+
+#### Min/Max
+
+To find the lower/upper date, use min/max:
+
+	minTime = new moment().min( myMomentA, myMomentB );
+	maxTime = new moment().max( myMomentA, myMomentB );
+
+#### Difference
+
+Find the difference between two datetimes in datepart units, considering time zone differences (their UTC times are compared):
+
+	x = new moment();
+	y = new moment( '2008-11-27 13:47' );
+	diff = y.diff( x, 'hours' );
+
+Returns the number of units that `y` is less than `x`.
+
+The same masking values from `add`/`subtract` work with `diff`.
+
+**NOTE:** Adobe ColdFusion does not support millisecond-level diffing, but it's not hard to add (lazy!)... So I did.
+
+#### Format
+
+Apply a [DateTimeFormat](https://wikidocs.adobe.com/wiki/display/coldfusionen/DateTimeFormat) mask to the current timestamp and return the resulting string.
+
+	x = new moment();
+	x.format( 'yyyy-mm-dd hh:nn:ss' );
+	//=> "2008-11-27 13:47"
+
+#### From
+
+Fuzzy time difference description between the two moments, **always** phrased in past tense:
+
+	x = new moment( '2008-11-27' );
+	y = new moment();
+
+	x.from( y );
+	//=> 6 years ago
+
+	y.from( x );
+	//=> 6 years ago
+
+#### FromNow
+
+Shorthand for calling `from` when one of the comparators ~= `now()`.
+
+	x = new moment( '2008-11-27' );
+	x.fromNow();
+	//=> 6 years ago
+
+#### Epoch
+
+Get your moment in its unix epoch format: milliseconds since 1970-01-01.
+
+	x = new moment( '2008-11-27' );
+	x.epoch();
+	//=> 1227762000000
+
+#### isBefore / isAfter
+
+Compare two dates to determine which one is before/after the other. Default datepart precision is `seconds`.
+
+	x = new moment( '2008-11-27' );
+	y = new moment();
+	old = x.isBefore( y, 'hours' );
+	//=> true
+
+	stillOld = y.isAfter( x, 'days' );
+	//=> true
+
+Here's a list of all precisions you can use with isBefore / isAfter:
+
+- Years: `years`, `year`, `y`
+- Months: `months`, `month`, `m`
+- Days: `days`, `day`, `d`
+- Hours: `hours`, `hour`, `h`
+- Minutes: `minutes`, `minute`, `n`
+- Seconds: `seconds`, `second`, `s`
+
+#### isSame
+
+Just like isBefore / isAfter, except you're testing that the two moments are the same, at least to the specified level of precision. Uses the same precisions as isBefore / isAfter.
+
+	x = new moment( '2008-11-27 13:47' );
+	y = new moment( '2008-11-27 6:30' );
+	same = x.isSame( y, 'hours' );
+	//=> true
+
+#### isBetween
+
+Determines if the current moment is between the two argument moments, at least to the specified level of precision.
+
+	x = new moment( '2008-11-27 06:30' );
+	y = new moment( '2008-11-27 13:47' );
+	z = new moment( '2011-01-01 06:06' );
+	betwixt = y.isBetween( y, 'minutes' );
+	//=> true
 
 
 ## Compatibility

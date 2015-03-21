@@ -95,12 +95,12 @@ component displayname="moment" {
 	}
 
 	public function from(compare) hint="returns fuzzy-date string e.g. 2 hours ago" {
-		var _moment = variables.utcTime;
-		var L = min( _moment, compare );
-		var R = max( _moment, compare );
+		var _moment = new moment( variables.utcTime, "UTC" );
+		var L = this.min( _moment, compare ).getDateTime();
+		var R = this.max( _moment, compare ).getDateTime();
 		var diff = 0;
 		//Seconds
-		if (dateDiff('s', L, R < 60)){
+		if (dateDiff('s', L, R) < 60){
 			return 'Just now';
 		}
 		//Minutes
@@ -132,7 +132,7 @@ component displayname="moment" {
 		}else if (diff == 12){
 			return "Last year";
 		}else{
-			diff = dateDiff("y", L, R);
+			diff = dateDiff("yyyy", L, R);
 			return diff & " year#(diff gt 1 ? 's' : '')# ago";
 		}
 	}

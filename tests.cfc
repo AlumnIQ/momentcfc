@@ -115,7 +115,7 @@ component extends="testbox.system.BaseSpec"{
 					expect( test3.add(1, 'd').getDateTime() ).toBe( compare2 );
 				});
 
-				it("supports masks: weekdays, weekday, and w", function(){
+				it("supports masks: weekdays, weekday, and wd", function(){
 					var compare = now();
 					var compare2 = dateAdd('w', 1, compare);
 					var test1 = new moment( compare );
@@ -125,10 +125,10 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'weekdays').getDateTime() ).toBe( compare2 );
 					expect( test2.add(1, 'weekday').getDateTime() ).toBe( compare2 );
-					expect( test3.add(1, 'w').getDateTime() ).toBe( compare2 );
+					expect( test3.add(1, 'wd').getDateTime() ).toBe( compare2 );
 				});
 
-				it("supports masks: weeks, week, and ww", function(){
+				it("supports masks: weeks, week, and w", function(){
 					var compare = now();
 					var compare2 = dateAdd('ww', 1, compare);
 					var test1 = new moment( compare );
@@ -138,7 +138,7 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'weeks').getDateTime() ).toBe( compare2 );
 					expect( test2.add(1, 'week').getDateTime() ).toBe( compare2 );
-					expect( test3.add(1, 'ww').getDateTime() ).toBe( compare2 );
+					expect( test3.add(1, 'w').getDateTime() ).toBe( compare2 );
 				});
 
 				it("supports masks: hours, hour, and h", function(){
@@ -249,7 +249,7 @@ component extends="testbox.system.BaseSpec"{
 					expect( test3.subtract(1, 'd').getDateTime() ).toBe( compare2 );
 				});
 
-				it("supports masks: weekdays, weekday, and w", function(){
+				it("supports masks: weekdays, weekday, and wd", function(){
 					var compare = now();
 					var compare2 = dateAdd('w', -1, compare);
 					var test1 = new moment( compare );
@@ -259,10 +259,10 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'weekdays').getDateTime() ).toBe( compare2 );
 					expect( test2.subtract(1, 'weekday').getDateTime() ).toBe( compare2 );
-					expect( test3.subtract(1, 'w').getDateTime() ).toBe( compare2 );
+					expect( test3.subtract(1, 'wd').getDateTime() ).toBe( compare2 );
 				});
 
-				it("supports masks: weeks, week, and ww", function(){
+				it("supports masks: weeks, week, and w", function(){
 					var compare = now();
 					var compare2 = dateAdd('ww', -1, compare);
 					var test1 = new moment( compare );
@@ -272,7 +272,7 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'weeks').getDateTime() ).toBe( compare2 );
 					expect( test2.subtract(1, 'week').getDateTime() ).toBe( compare2 );
-					expect( test3.subtract(1, 'ww').getDateTime() ).toBe( compare2 );
+					expect( test3.subtract(1, 'w').getDateTime() ).toBe( compare2 );
 				});
 
 				it("supports masks: hours, hour, and h", function(){
@@ -456,7 +456,7 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.diff( test3, 'd'    ) ).toBe( dateDiff( 'd', base, pushB ) );
 				});
 
-				it("works for weekdays, weekday, w", function(){
+				it("works for weekdays, weekday, wd", function(){
 					var base = now();
 					var pushA = dateAdd('w', 5, base );
 					var pushB = dateAdd('w', -5, base );
@@ -524,7 +524,7 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.diff( test3, 's'       ) ).toBe( dateDiff( 's', base, pushB ) );
 				});
 
-				it("works for milliseconds, millisecond, l", function(){
+				it("works for milliseconds, millisecond, ms", function(){
 					var base = now();
 					var pushA = dateAdd('l', 5, base );
 					var pushB = dateAdd('l', -5, base );
@@ -552,7 +552,6 @@ component extends="testbox.system.BaseSpec"{
 			describe("getZoneTable()", function(){
 				var tbl = new moment().getZoneTable();
 				expect( tbl ).toBeStruct();
-				debug( tbl );
 			});
 
 		});

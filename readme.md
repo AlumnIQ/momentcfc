@@ -15,6 +15,7 @@ CFML is all about making complex things simple, but date-math seems to have miss
 | `diff = dateDiff( 's', x, y );`                    | `diff = x.diff( y, 'seconds' );`                |
 | `before = ( dateCompare( now(), x, 'h' ) == -1 );` | `before = x.isBefore( new moment(), 'hours' );` |
 
+But before we look at the syntax awesomeness of moment.cfc, let's take a quick moment to talk about...
 
 ## Time Zones
 
@@ -48,11 +49,6 @@ And yes, all of the above methods (constructor as well as `.utc()` and `.tz()`) 
 	dst = new moment().isDST();
 	//=> true/false
 
-### Need a list of time zones and their displayable offsets?
-
-	tbl = new moment().getZoneTable();
-	//=> { "America/New_York": "-4:00", ... }
-
 ### If you want to get a time zone's offset in seconds
 
 This _does_ respect Daylight Saving Time:
@@ -63,8 +59,47 @@ You can get the current offset of a moment, without knowing its time zone, with 
 
 	offset = myMoment.getCurrentOffset();
 
+### Want the current time zone?
 
-## More docs to come...
+	zone = myMoment.getZone();
+	//=> "America/New_York"
+
+### Want to know your system time zone?
+
+	systemZone = myMoment.getSystemTZ();
+	//=> "America/New_York"
+
+### Need a list of all world time zones and their displayable offsets?
+
+This shows the zone's current offset, respecting their Daylight Saving Time rules:
+
+	tbl = new moment().getZoneTable();
+	//=> { "America/New_York": "-4:00", ... }
+
+## Basic Date & Time Methods
+
+### Add/Subtract some time
+
+The syntax and format masks for `dateAdd()` aren't that hard to remember, but they also aren't very readable. We can do better...
+
+	new moment().add(1, 'day').subtract(6, 'weeks');
+
+Here's a list of all masks you can use with add/subtract:
+
+- Years: `years`, `year`, `y`
+- Quarters: `quarters`, `quarter`, `q`
+- Weeks: `weeks`, `week`, `w` **\***
+- Days: `days`, `day`, `d`
+- Weekdays: `weekdays`, `weekday`, `wd` **\***
+- Hours: `hours`, `hour`, `h`
+- Minutes: `minutes`, `minute`, `n`
+- Seconds: `seconds`, `second`, `s`
+- Milliseconds: `milliseconds`, `millisecond`, `ms` **\*\***
+
+**\*Deviation from the official dateAdd mask:** Adobe, in their infinite wisdom, decided to use `ww` for weeks and `w` for weekdays. Moment uses the sane alternative defined here.
+
+**\*\*Another deviation from the official dateAdd mask:** `ms` just makes more sense than the `l` that Adobe uses.
+
 
 ## Compatibility
 

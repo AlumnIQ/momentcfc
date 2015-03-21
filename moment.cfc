@@ -59,9 +59,19 @@ component displayname="moment" {
 	//STATICS
 	//===========================================
 
-	public moment function min( a, b ) hint="returns whichever moment came first" {}
+	public moment function min( a, b ) hint="returns whichever moment came first" {
+		if ( a.isBefore( b ) ){
+			return a;
+		}
+		return b;
+	}
 
-	public moment function max( a, b ) hint="returns whichever moment came last" {}
+	public moment function max( a, b ) hint="returns whichever moment came last" {
+		if ( a.isAfter( b ) ){
+			return a;
+		}
+		return b;
+	}
 
 	public numeric function diff( b, part = 'milliseconds' ) hint="get the difference between the current date and the specified date" {
 		part = canonicalizeDatePart( part );
@@ -122,6 +132,39 @@ component displayname="moment" {
 			diff = dateDiff("y", L, R);
 			return diff & " year#(diff gt 1 ? 's' : '')# ago";
 		}
+	}
+
+	public function epoch() hint="returns the number of milliseconds since 1/1/1970 (local). Call .utc() first to get utc epoch" {
+		return variables.time.getTime();
+	}
+
+	//===========================================
+	//QUERY
+	//===========================================
+
+	public boolean function isBefore( compare, part = 'milliseconds' ) {
+		part = canonicalizeDatePart( part );
+		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == -1);
+	}
+
+	public boolean function isSame( compare, part = 'milliseconds' ) {
+		part = canonicalizeDatePart( part );
+		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == 0);
+	}
+
+	public boolean function isAfter( compare, part = 'milliseconds' ) {
+		part = canonicalizeDatePart( part );
+		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == 1);
+	}
+
+	public boolean function isBetween( a, c, part = 'milliseconds' ) {
+		part = canonicalizeDatePart( part );
+		return ( isBefore(c, part) && isAfter(a, part) );
+	}
+
+	public boolean function isDST() {
+		var dt = createObject("java", "java.util.Date").init( epoch() );
+		return getZone( variables.zone ).inDayLightTime( dt );
 	}
 
 	//===========================================

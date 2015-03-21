@@ -405,23 +405,6 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.diff( test3, 'q'        ) ).toBe( dateDiff( 'q', base, pushB ) );
 				});
 
-				it("works for weeks, week, ww", function(){
-					var base = now();
-					var pushA = dateAdd('ww', 5, base );
-					var pushB = dateAdd('ww', -5, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
-
-					expect( test1.diff( new moment(base), 'ww' ) ).toBe( 0 );
-					expect( test1.diff( test2, 'weeks' ) ).toBe( dateDiff( 'ww', base, pushA ) );
-					expect( test1.diff( test2, 'week'  ) ).toBe( dateDiff( 'ww', base, pushA ) );
-					expect( test1.diff( test2, 'w'     ) ).toBe( dateDiff( 'ww', base, pushA ) );
-					expect( test1.diff( test3, 'weeks' ) ).toBe( dateDiff( 'ww', base, pushB ) );
-					expect( test1.diff( test3, 'week'  ) ).toBe( dateDiff( 'ww', base, pushB ) );
-					expect( test1.diff( test3, 'w'     ) ).toBe( dateDiff( 'ww', base, pushB ) );
-				});
-
 				it("works for months, month, m", function(){
 					var base = now();
 					var pushA = dateAdd('m', 5, base );
@@ -437,6 +420,23 @@ component extends="testbox.system.BaseSpec"{
 					expect( test1.diff( test3, 'months' ) ).toBe( dateDiff( 'm', base, pushB ) );
 					expect( test1.diff( test3, 'month'  ) ).toBe( dateDiff( 'm', base, pushB ) );
 					expect( test1.diff( test3, 'm'      ) ).toBe( dateDiff( 'm', base, pushB ) );
+				});
+
+				it("works for weeks, week, w", function(){
+					var base = now();
+					var pushA = dateAdd('ww', 5, base );
+					var pushB = dateAdd('ww', -5, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
+
+					expect( test1.diff( new moment(base), 'w' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'weeks' ) ).toBe( dateDiff( 'ww', base, pushA ) );
+					expect( test1.diff( test2, 'week'  ) ).toBe( dateDiff( 'ww', base, pushA ) );
+					expect( test1.diff( test2, 'w'     ) ).toBe( dateDiff( 'ww', base, pushA ) );
+					expect( test1.diff( test3, 'weeks' ) ).toBe( dateDiff( 'ww', base, pushB ) );
+					expect( test1.diff( test3, 'week'  ) ).toBe( dateDiff( 'ww', base, pushB ) );
+					expect( test1.diff( test3, 'w'     ) ).toBe( dateDiff( 'ww', base, pushB ) );
 				});
 
 				it("works for days, day, d", function(){

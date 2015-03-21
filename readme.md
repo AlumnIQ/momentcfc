@@ -88,17 +88,17 @@ Here's a list of all masks you can use with add/subtract:
 
 - Years: `years`, `year`, `y`
 - Quarters: `quarters`, `quarter`, `q`
-- Weeks: `weeks`, `week`, `w` **\***
+- Weeks: `weeks`, `week`, `w` *
 - Days: `days`, `day`, `d`
-- Weekdays: `weekdays`, `weekday`, `wd` **\***
+- Weekdays: `weekdays`, `weekday`, `wd` *
 - Hours: `hours`, `hour`, `h`
 - Minutes: `minutes`, `minute`, `n`
 - Seconds: `seconds`, `second`, `s`
-- Milliseconds: `milliseconds`, `millisecond`, `ms` **\*\***
+- Milliseconds: `milliseconds`, `millisecond`, `ms` **\* \***
 
-**\*Deviation from the official dateAdd mask:** Adobe, in their infinite wisdom, decided to use `ww` for weeks and `w` for weekdays. Moment uses the sane alternative defined here.
+**\* Deviation from the official dateAdd mask:** Adobe, in their infinite wisdom, decided to use `ww` for weeks and `w` for weekdays. Moment uses the sane alternative defined here.
 
-**\*\*Another deviation from the official dateAdd mask:** `ms` just makes more sense than the `l` that Adobe uses.
+**\* \* Another deviation from the official dateAdd mask:** `ms` just makes more sense than the `l` that Adobe uses.
 
 
 ## Compatibility

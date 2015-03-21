@@ -27,7 +27,7 @@ component{
 		var passing = results.getTotalPass();
 		var status = "#passing# / #total#";
 		var color = (total == passing) ? "brightgreen" : "red";
-		location(url="https://img.shields.io/badge/tests-#status#-#color#.png?style=flat",addtoken="false");
+		location(url="https://img.shields.io/badge/tests-#status#-#color#.svg",addtoken="false");
 	}
 
 }

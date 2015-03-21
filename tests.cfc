@@ -367,54 +367,173 @@ component extends="testbox.system.BaseSpec"{
 			describe("diff()", function(){
 
 				it("works for years, year, y", function(){
-					var compare = now();
-					var test1 = new moment( compare );
-					var test2 = new moment( dateAdd('yyyy', 20, compare ) );
-					var test3 = new moment( dateAdd('yyyy', -20, compare ) );
+					var base = now();
+					var pushA = dateAdd('yyyy', 20, base );
+					var pushB = dateAdd('yyyy', -20, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
 
-					expect( test1.diff( new moment(compare) ) ).toBe( 0 );
-					//currently illustrating issues with datepart canonicalization
-					expect( test1.diff( test2, 'years' ) ).toBe( dateDiff('yyyy', test1.getDateTime(), test2.getDateTime()) );
-					expect( test1.diff( test3, 'years' ) ).toBe( dateDiff('yyyy', test1.getDateTime(), test3.getDateTime()) );
+					expect( test1.diff( new moment(base), 'y' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'years' ) ).toBe( dateDiff( 'yyyy', base, pushA ) );
+					expect( test1.diff( test2, 'year'  ) ).toBe( dateDiff( 'yyyy', base, pushA ) );
+					expect( test1.diff( test2, 'y'     ) ).toBe( dateDiff( 'yyyy', base, pushA ) );
+					expect( test1.diff( test3, 'years' ) ).toBe( dateDiff( 'yyyy', base, pushB ) );
+					expect( test1.diff( test3, 'year'  ) ).toBe( dateDiff( 'yyyy', base, pushB ) );
+					expect( test1.diff( test3, 'y'     ) ).toBe( dateDiff( 'yyyy', base, pushB ) );
 				});
 
 				it("works for quarters, quarter, q", function(){
-					var compare = now();
-					var test1 = new moment( compare );
-					var test2 = new moment( dateAdd('q', 20, compare ) );
-					var test3 = new moment( dateAdd('q', -20, compare ) );
+					var base = now();
+					var pushA = dateAdd('q', 5, base );
+					var pushB = dateAdd('q', -5, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
 
-					expect( test1.diff( new moment(compare) ) ).toBe( 0 );
-					//currently illustrating issues with datepart canonicalization
-					expect( test1.diff( test2, 'quarters' ) ).toBe( dateDiff('q', test1.getDateTime(), test2.getDateTime()) );
-					expect( test1.diff( test3, 'quarters' ) ).toBe( dateDiff('q', test1.getDateTime(), test3.getDateTime()) );
+					expect( test1.diff( new moment(base), 'q' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'quarters' ) ).toBe( dateDiff( 'q', base, pushA ) );
+					expect( test1.diff( test2, 'quarter'  ) ).toBe( dateDiff( 'q', base, pushA ) );
+					expect( test1.diff( test2, 'q'        ) ).toBe( dateDiff( 'q', base, pushA ) );
+					expect( test1.diff( test3, 'quarters' ) ).toBe( dateDiff( 'q', base, pushB ) );
+					expect( test1.diff( test3, 'quarter'  ) ).toBe( dateDiff( 'q', base, pushB ) );
+					expect( test1.diff( test3, 'q'        ) ).toBe( dateDiff( 'q', base, pushB ) );
+				});
+
+				it("works for weeks, week, ww", function(){
+					var base = now();
+					var pushA = dateAdd('ww', 5, base );
+					var pushB = dateAdd('ww', -5, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
+
+					expect( test1.diff( new moment(base), 'ww' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'weeks' ) ).toBe( dateDiff( 'ww', base, pushA ) );
+					expect( test1.diff( test2, 'week'  ) ).toBe( dateDiff( 'ww', base, pushA ) );
+					expect( test1.diff( test2, 'ww'    ) ).toBe( dateDiff( 'ww', base, pushA ) );
+					expect( test1.diff( test3, 'weeks' ) ).toBe( dateDiff( 'ww', base, pushB ) );
+					expect( test1.diff( test3, 'week'  ) ).toBe( dateDiff( 'ww', base, pushB ) );
+					expect( test1.diff( test3, 'ww'    ) ).toBe( dateDiff( 'ww', base, pushB ) );
 				});
 
 				it("works for months, month, m", function(){
-					var compare = now();
-					var test1 = new moment( compare );
-					var test2 = new moment( dateAdd('m', 3, compare ) );
-					var test3 = new moment( dateAdd('m', -3, compare ) );
+					var base = now();
+					var pushA = dateAdd('m', 5, base );
+					var pushB = dateAdd('m', -5, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
 
-					expect( test1.diff( new moment(compare) ) ).toBe( 0 );
-					//currently illustrating issues with datepart canonicalization
-					expect( test1.diff( test2, 'months' ) ).toBe( dateDiff('m', test1.getDateTime(), test2.getDateTime()) );
-					expect( test1.diff( test3, 'months' ) ).toBe( dateDiff('m', test1.getDateTime(), test3.getDateTime()) );
+					expect( test1.diff( new moment(base), 'm' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'months' ) ).toBe( dateDiff( 'm', base, pushA ) );
+					expect( test1.diff( test2, 'month'  ) ).toBe( dateDiff( 'm', base, pushA ) );
+					expect( test1.diff( test2, 'm'      ) ).toBe( dateDiff( 'm', base, pushA ) );
+					expect( test1.diff( test3, 'months' ) ).toBe( dateDiff( 'm', base, pushB ) );
+					expect( test1.diff( test3, 'month'  ) ).toBe( dateDiff( 'm', base, pushB ) );
+					expect( test1.diff( test3, 'm'      ) ).toBe( dateDiff( 'm', base, pushB ) );
 				});
 
-				//todo: the rest of the masks
-				//also todo: fix the issues with masking
+				it("works for days, day, d", function(){
+					var base = now();
+					var pushA = dateAdd('m', 5, base );
+					var pushB = dateAdd('m', -5, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
+
+					expect( test1.diff( new moment(base), 'd' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'days' ) ).toBe( dateDiff( 'd', base, pushA ) );
+					expect( test1.diff( test2, 'day'  ) ).toBe( dateDiff( 'd', base, pushA ) );
+					expect( test1.diff( test2, 'd'    ) ).toBe( dateDiff( 'd', base, pushA ) );
+					expect( test1.diff( test3, 'days' ) ).toBe( dateDiff( 'd', base, pushB ) );
+					expect( test1.diff( test3, 'day'  ) ).toBe( dateDiff( 'd', base, pushB ) );
+					expect( test1.diff( test3, 'd'    ) ).toBe( dateDiff( 'd', base, pushB ) );
+				});
+
+				it("works for weekdays, weekday, w", function(){
+					var base = now();
+					var pushA = dateAdd('w', 5, base );
+					var pushB = dateAdd('w', -5, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
+
+					expect( test1.diff( new moment(base), 'w' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'weekdays' ) ).toBe( dateDiff( 'w', base, pushA ) );
+					expect( test1.diff( test2, 'weekday'  ) ).toBe( dateDiff( 'w', base, pushA ) );
+					expect( test1.diff( test2, 'w'        ) ).toBe( dateDiff( 'w', base, pushA ) );
+					expect( test1.diff( test3, 'weekdays' ) ).toBe( dateDiff( 'w', base, pushB ) );
+					expect( test1.diff( test3, 'weekday'  ) ).toBe( dateDiff( 'w', base, pushB ) );
+					expect( test1.diff( test3, 'w'        ) ).toBe( dateDiff( 'w', base, pushB ) );
+				});
+
+				it("works for hours, hour, h", function(){
+					var base = now();
+					var pushA = dateAdd('h', 5, base );
+					var pushB = dateAdd('h', -5, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
+
+					expect( test1.diff( new moment(base), 'h' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'hours' ) ).toBe( dateDiff( 'h', base, pushA ) );
+					expect( test1.diff( test2, 'hour'  ) ).toBe( dateDiff( 'h', base, pushA ) );
+					expect( test1.diff( test2, 'h'     ) ).toBe( dateDiff( 'h', base, pushA ) );
+					expect( test1.diff( test3, 'hours' ) ).toBe( dateDiff( 'h', base, pushB ) );
+					expect( test1.diff( test3, 'hour'  ) ).toBe( dateDiff( 'h', base, pushB ) );
+					expect( test1.diff( test3, 'h'     ) ).toBe( dateDiff( 'h', base, pushB ) );
+				});
+
+				it("works for minutes, minute, n", function(){
+					var base = now();
+					var pushA = dateAdd('n', 5, base );
+					var pushB = dateAdd('n', -5, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
+
+					expect( test1.diff( new moment(base), 'n' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'minutes' ) ).toBe( dateDiff( 'n', base, pushA ) );
+					expect( test1.diff( test2, 'minute'  ) ).toBe( dateDiff( 'n', base, pushA ) );
+					expect( test1.diff( test2, 'n'       ) ).toBe( dateDiff( 'n', base, pushA ) );
+					expect( test1.diff( test3, 'minutes' ) ).toBe( dateDiff( 'n', base, pushB ) );
+					expect( test1.diff( test3, 'minute'  ) ).toBe( dateDiff( 'n', base, pushB ) );
+					expect( test1.diff( test3, 'n'       ) ).toBe( dateDiff( 'n', base, pushB ) );
+				});
 
 				it("works for seconds, second, s", function(){
-					var compare = now();
-					var test1 = new moment( compare );
-					var test2 = new moment( dateAdd('s', 20, compare ) );
-					var test3 = new moment( dateAdd('s', -20, compare ) );
+					var base = now();
+					var pushA = dateAdd('s', 5, base );
+					var pushB = dateAdd('s', -5, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
 
-					expect( test1.diff( new moment(compare) ) ).toBe( 0 );
-					//currently illustrating issues with datepart canonicalization
-					expect( test1.diff( test2, 'seconds' ) ).toBe( dateDiff('s', test1.getDateTime(), test2.getDateTime()) );
-					expect( test1.diff( test3, 'seconds' ) ).toBe( dateDiff('s', test1.getDateTime(), test3.getDateTime()) );
+					expect( test1.diff( new moment(base), 's' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'seconds' ) ).toBe( dateDiff( 's', base, pushA ) );
+					expect( test1.diff( test2, 'second'  ) ).toBe( dateDiff( 's', base, pushA ) );
+					expect( test1.diff( test2, 's'       ) ).toBe( dateDiff( 's', base, pushA ) );
+					expect( test1.diff( test3, 'seconds' ) ).toBe( dateDiff( 's', base, pushB ) );
+					expect( test1.diff( test3, 'second'  ) ).toBe( dateDiff( 's', base, pushB ) );
+					expect( test1.diff( test3, 's'       ) ).toBe( dateDiff( 's', base, pushB ) );
+				});
+
+				it("works for milliseconds, millisecond, l", function(){
+					var base = now();
+					var pushA = dateAdd('l', 5, base );
+					var pushB = dateAdd('l', -5, base );
+					var test1 = new moment( base );
+					var test2 = new moment( pushA );
+					var test3 = new moment( pushB );
+
+					expect( test1.diff( new moment(base), 'l' ) ).toBe( 0 );
+					expect( test1.diff( test2, 'milliseconds' ) ).toBe( pushA.getTime() - base.getTime() );
+					expect( test1.diff( test2, 'millisecond'  ) ).toBe( pushA.getTime() - base.getTime() );
+					expect( test1.diff( test2, 'l'            ) ).toBe( pushA.getTime() - base.getTime() );
+					expect( test1.diff( test3, 'milliseconds' ) ).toBe( pushB.getTime() - base.getTime() );
+					expect( test1.diff( test3, 'millisecond'  ) ).toBe( pushB.getTime() - base.getTime() );
+					expect( test1.diff( test3, 'l'            ) ).toBe( pushB.getTime() - base.getTime() );
 				});
 
 			});

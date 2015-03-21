@@ -15,7 +15,7 @@ CFML is all about making complex things simple, but date-math seems to have miss
 | `diff = dateDiff( 's', x, y );`                | `diff = x.diff( y, 'seconds' );`           |
 | `before = dateCompare( now(), x, 'h' ) == -1;` | `before = x.isBefore( y, 'hours' );`       |
 
-But before we look at the syntax awesomeness of moment.cfc, let's take a quick moment to talk about...
+But before we look at the syntax awesomeness of moment.cfc in detail, let's take a quick moment to talk about...
 
 ## Time Zones
 
@@ -44,12 +44,12 @@ Or instead of UTC, let's see what time that would have been in Phoenix using the
 
 And yes, all of the above methods (constructor as well as `.utc()` and `.tz()`) are chainable.
 
-### Curious if your current moment is during Daylight Saving Time?
+#### Curious if your current moment is during Daylight Saving Time?
 
 	dst = new moment().isDST();
 	//=> true/false
 
-### If you want to get a time zone's offset in seconds
+#### If you want to get a time zone's offset in seconds
 
 This _does_ respect Daylight Saving Time:
 
@@ -59,17 +59,17 @@ You can get the current offset of a moment, without knowing its time zone, with 
 
 	offset = myMoment.getCurrentOffset();
 
-### Want the current time zone?
+#### Want the current time zone?
 
 	zone = myMoment.getZone();
 	//=> "America/New_York"
 
-### Want to know your system time zone?
+#### Want to know your system time zone?
 
 	systemZone = myMoment.getSystemTZ();
 	//=> "America/New_York"
 
-### Need a list of all world time zones and their displayable offsets?
+#### Need a list of all world time zones and their displayable offsets?
 
 This shows the zone's current offset, respecting their Daylight Saving Time rules:
 
@@ -78,7 +78,7 @@ This shows the zone's current offset, respecting their Daylight Saving Time rule
 
 ## Basic Date & Time Methods
 
-### Add/Subtract some time
+#### Add/Subtract some time
 
 The syntax and format masks for `dateAdd()` aren't that hard to remember, but they also aren't very readable. We can do better...
 

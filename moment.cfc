@@ -73,7 +73,7 @@ component displayname="moment" {
 		return b;
 	}
 
-	public numeric function diff( b, part = 'milliseconds' ) hint="get the difference between the current date and the specified date" {
+	public numeric function diff( b, part = 'seconds' ) hint="get the difference between the current date and the specified date" {
 		part = canonicalizeDatePart( part );
 		return dateDiff( part, variables.utcTime, b.utc().getDateTime() );
 	}
@@ -142,22 +142,22 @@ component displayname="moment" {
 	//QUERY
 	//===========================================
 
-	public boolean function isBefore( compare, part = 'milliseconds' ) {
+	public boolean function isBefore( compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part );
 		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == -1);
 	}
 
-	public boolean function isSame( compare, part = 'milliseconds' ) {
+	public boolean function isSame( compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part );
 		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == 0);
 	}
 
-	public boolean function isAfter( compare, part = 'milliseconds' ) {
+	public boolean function isAfter( compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part );
 		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == 1);
 	}
 
-	public boolean function isBetween( a, c, part = 'milliseconds' ) {
+	public boolean function isBetween( a, c, part = 'seconds' ) {
 		part = canonicalizeDatePart( part );
 		return ( isBefore(c, part) && isAfter(a, part) );
 	}
@@ -272,7 +272,7 @@ component displayname="moment" {
 			case "milliseconds":
 			case "millisecond":
 			case "l":
-				return "l";
+				return "L";
 		}
 		return "ERR";
 	}

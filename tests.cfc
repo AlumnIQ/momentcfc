@@ -180,7 +180,7 @@ component extends="testbox.system.BaseSpec"{
 					expect( test3.add(1, 's').getDateTime() ).toBe( compare2 );
 				});
 
-				it("supports masks: milliseconds, millisecond, and l", function(){
+				it("supports masks: milliseconds, millisecond, and ms", function(){
 					var compare = now();
 					var compare2 = dateAdd('l', 1, compare);
 					var test1 = new moment( compare );
@@ -314,7 +314,7 @@ component extends="testbox.system.BaseSpec"{
 					expect( test3.subtract(1, 's').getDateTime() ).toBe( compare2 );
 				});
 
-				it("supports masks: milliseconds, millisecond, and l", function(){
+				it("supports masks: milliseconds, millisecond, and ms", function(){
 					var compare = now();
 					var compare2 = dateAdd('l', -1, compare);
 					var test1 = new moment( compare );

@@ -22,7 +22,7 @@ component displayname="moment" {
 				-- for instance initialized to someTimeValue in someTZID TZ
 	*/
 	public function init( time = now(), zone = getSystemTZ() ) {
-		variables.time = arguments.time;
+		variables.time = (time contains '{ts') ? time : parseDateTime( arguments.time );
 		variables.zone = zone;
 		variables.utcTime = TZtoUTC( arguments.time, arguments.zone );
 		return this;

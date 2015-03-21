@@ -28,6 +28,11 @@ component extends="testbox.system.BaseSpec"{
 				expect( test.getDateTime() ).toBe( compare );
 			});
 
+			it("accepts a datetime string as the first arg", function(){
+				var test = new moment( '2008-11-27 6:06' );
+				expect( test ).toBeComponent();
+			});
+
 		});
 
 		describe("MUTATORS", function(){

@@ -2,7 +2,7 @@
 
 Inspired by moment.js, but not a strict port. With added Time Zone switchy goodness!
 
-<a href="http://fusiongrokker.com/demo/momentcfc/tests.cfc?method=runremote"><img src="http://fusiongrokker.com/demo/momentcfc/tests.cfc?method=runremote&reporter=testShield" /></a> <img src="https://img.shields.io/badge/Adobe%20ColdFusion-11%2B-blue.svg" /> <img src="https://img.shields.io/badge/Lucee-4%2B-blue.svg" /> <img src="https://img.shields.io/badge/Railo-4%2B-blue.svg" /> <img src="https://img.shields.io/badge/awesomeness-11-orange.svg" />
+<a href="http://fusiongrokker.com/demo/momentcfc/tests.cfc?method=runremote"><img src="http://fusiongrokker.com/demo/momentcfc/tests.cfc?method=runremote&reporter=testShield" /></a> <img src="https://img.shields.io/badge/Adobe%20ColdFusion-10%2B-blue.svg" /> <img src="https://img.shields.io/badge/Lucee-4%2B-blue.svg" /> <img src="https://img.shields.io/badge/Railo-4%2B-blue.svg" /> <img src="https://img.shields.io/badge/awesomeness-11-orange.svg" />
 
 CFML is all about making complex things simple, but date-math seems to have missed this boat.
 
@@ -223,7 +223,7 @@ After all is said and done, sometimes you just need the raw datetime object back
 
 ## Compatibility
 
-To date, development has been done against Adobe ColdFusion 11, in particular giving preference to `dateTimeFormat()` and its masks. Adobe CF10 compatibility might be possible, but probably not as easy as Lucee and Railo. Pull requests welcome in this department!
+To date, development has been done against Adobe ColdFusion 10 and 11, in particular giving preference to `dateTimeFormat()` and its masks. Adobe CF9 compatibility might be possible, but probably not as easy as Lucee and Railo. Pull requests welcome in this department!
 
 ## Testing
 

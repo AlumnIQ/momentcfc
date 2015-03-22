@@ -553,15 +553,260 @@ component extends="testbox.system.BaseSpec"{
 
 			});
 
-		});
+			describe("getZoneOffset()", function(){
+				it("returns the offset in seconds (considering DST) of the specified zone", function(){
+					var test = new moment( now(), 'America/New_York' );
+					var dst = test.isDST();
+					expect( test.getZoneOffset( 'America/New_York' ) ).toBe( dst ? -14400 : -18000 );
+				});
+			});
 
-		describe("QUERY", function(){});
-
-		describe("RETURNS & MISC", function(){
+			describe("getSystemTZ()", function(){
+				it("is a simple wrapper of core Java functionality, without need of testing", function(){});
+			});
 
 			describe("getZoneTable()", function(){
-				var tbl = new moment().getZoneTable();
-				expect( tbl ).toBeStruct();
+				it("returns a struct", function(){
+					var tbl = new moment().getZoneTable();
+					expect( tbl ).toBeStruct();
+					expect( tbl ).notToBeEmpty();
+				});
+			});
+
+		});
+
+		describe("TERMINATORS", function(){
+
+			describe("format()", function(){
+				it("does its thing", function(){
+					var base = now();
+					var mask = 'yyyy-mm-dd hh:nn:sstt';
+					var compare = dateTimeFormat(base, mask);
+					var test = new moment( base );
+
+					expect( test.format( mask ) ).toBe( compare );
+				});
+			});
+
+			describe("from()", function(){
+				var base = new moment();
+
+				it("detects multiple years", function(){
+					var test = base.clone().add( 3, 'years' ).add( 3, 'weeks' );
+					var test2 = base.clone().add( 3, 'years' ).subtract( 3, 'weeks' );
+					expect( test.from( base ) ).toBe( '3 years ago' );
+				});
+
+				it("detects single years", function(){
+					var test = base.clone().add( 1, 'year' ).add( 3, 'weeks' );
+					var test2 = base.clone().add( 1, 'year' ).subtract( 3, 'weeks' );
+					expect( test.from( base ) ).toBe( 'Last year' );
+				});
+
+				it("detects multiple months", function(){
+					var test = base.clone().add( 8, 'months' ).add( 3, 'days' );
+					var test2 = base.clone().add( 8, 'months' ).subtract( 3, 'days' );
+					expect( test.from( base ) ).toBe( '8 months ago' );
+				});
+
+				it("detects single months", function(){
+					var test = base.clone().add( 1, 'months' ).add( 3, 'days' );
+					var test2 = base.clone().add( 1, 'months' ).subtract( 3, 'days' );
+					expect( test.from( base ) ).toBe( '1 month ago' );
+				});
+
+				it("detects multiple weeks", function(){
+					var test = base.clone().add( 3, 'weeks' ).add( 2, 'hours' );
+					var test2 = base.clone().add( 3, 'weeks' ).subtract( 2, 'hours' );
+					expect( test.from( base ) ).toBe( '3 weeks ago' );
+				});
+
+				it("detects single weeks", function(){
+					var test = base.clone().add( 1, 'weeks' ).add( 2, 'hours' );
+					var test2 = base.clone().add( 1, 'weeks' ).subtract( 2, 'hours' );
+					expect( test.from( base ) ).toBe( 'Last week' );
+				});
+
+				it("detects days", function(){
+					var test = base.clone().add( 4, 'days' ).add( 2, 'hours' );
+					var test2 = base.clone().add( 4, 'days' ).subtract( 2, 'hours' );
+					expect( left(test.from( base ), 4) ).toBe( 'Last' );
+					expect( right(test.from( base ), 3) ).toBe( 'day' );
+				});
+
+				it("detects multiple hours", function(){
+					var test = base.clone().add( 4, 'hours' ).add( 15, 'minutes' );
+					var test2 = base.clone().add( 4, 'hours' ).subtract( 15, 'minutes' );
+					expect( test.from( base ) ).toBe( '4 hours ago' );
+				});
+
+				it("detects single hours", function(){
+					var test = base.clone().add( 1, 'hours' ).add( 15, 'minutes' );
+					var test2 = base.clone().add( 1, 'hours' ).subtract( 15, 'minutes' );
+					expect( test.from( base ) ).toBe( '1 hour ago' );
+				});
+
+				it("detects multiple minutes", function(){
+					var test = base.clone().add( 10, 'minutes' ).add( 15, 'seconds' );
+					var test2 = base.clone().add( 10, 'minutes' ).subtract( 15, 'seconds' );
+					expect( test.from( base ) ).toBe( '10 minutes ago' );
+				});
+
+				it("detects single minutes", function(){
+					var test = base.clone().add( 1, 'minute' ).add( 15, 'seconds' );
+					expect( test.from( base ) ).toBe( '1 minute ago' );
+				});
+
+				it("detects seconds", function(){
+					var test = base.clone().add( 20, 'seconds' ).add( 100, 'ms' );
+					var test2 = base.clone().add( 20, 'seconds' ).subtract( 100, 'ms' );
+					expect( test.from( base ) ).toBe( 'Just now' );
+				});
+			});
+
+			describe("fromNow()", function(){
+				it("is just a wrapper for from, so it gets a pass",function(){});
+			});
+
+			describe("epoch()", function(){
+				it("gets the correct epoch from a EST time", function(){
+					var test = new moment( '2008-11-27', 'America/New_York' );
+					expect( test.epoch() ).toBe( 1227762000000 );
+				});
+
+				it("gets the correct epoch from a EDT time", function(){
+					var test = new moment( '2015-03-20', 'America/New_York' );
+					expect( test.epoch() ).toBe( 1426824000000 );
+				});
+
+				it("gets the correct epoch from a UTC time", function(){
+					var test = new moment( '2015-03-20', 'UTC' );
+					expect( test.epoch() ).toBe( 1426824000000 );
+				});
+			});
+
+			describe("getDateTime()", function(){
+				it("returns a native time object", function(){
+					var test = new moment();
+					expect( left( test.getDateTime(), 3) ).toBe( '{ts' );
+				});
+			});
+
+			describe("getZone()", function(){
+				it("returns a string", function(){
+					var test = new moment();
+					expect( test.getZone() ).toBeString();
+					expect( test.getZone() ).notToBeEmpty();
+				});
+			});
+
+			describe("getCurrentOffset()", function(){
+				it("returns the correct offset", function(){
+					//this may be troublesome if tested in another zone... we'll see!
+					var test = new moment( now(), 'America/New_York' );
+					var dst = test.isDST();
+					expect( test.getCurrentOffset() ).toBe( dst ? -14400 : -18000 );
+				});
+			});
+
+		});
+
+		describe("QUERY", function(){
+
+			describe("isBefore", function(){
+				var base = new moment();
+				var clone = base.clone();
+				var test = base.clone().add(10, 'years');
+
+				it("works on true", function(){
+					expect( base.isBefore( test, 'years' )).toBeTrue();
+					expect( base.isBefore( test, 'months' )).toBeTrue();
+					expect( base.isBefore( test, 'days' )).toBeTrue();
+					expect( base.isBefore( test, 'hours' )).toBeTrue();
+					expect( base.isBefore( test, 'minutes' )).toBeTrue();
+					expect( base.isBefore( test, 'seconds' )).toBeTrue();
+				});
+				it("works on false", function(){
+					expect( test.isBefore( base, 'years' )).toBeFalse();
+					expect( test.isBefore( base, 'months' )).toBeFalse();
+					expect( test.isBefore( base, 'days' )).toBeFalse();
+					expect( test.isBefore( base, 'hours' )).toBeFalse();
+					expect( test.isBefore( base, 'minutes' )).toBeFalse();
+					expect( test.isBefore( base, 'seconds' )).toBeFalse();
+				});
+				it("works on same", function(){
+					expect( test.isBefore( clone, 'years' )).toBeFalse();
+					expect( test.isBefore( clone, 'months' )).toBeFalse();
+					expect( test.isBefore( clone, 'days' )).toBeFalse();
+					expect( test.isBefore( clone, 'hours' )).toBeFalse();
+					expect( test.isBefore( clone, 'minutes' )).toBeFalse();
+					expect( test.isBefore( clone, 'seconds' )).toBeFalse();
+				});
+			});
+
+			describe("isAfter", function(){
+				var base = new moment();
+				var clone = base.clone();
+				var test = base.clone().subtract(10, 'years');
+
+				it("works on true", function(){
+					expect( base.isAfter( test, 'years' )).toBeTrue();
+					expect( base.isAfter( test, 'months' )).toBeTrue();
+					expect( base.isAfter( test, 'days' )).toBeTrue();
+					expect( base.isAfter( test, 'hours' )).toBeTrue();
+					expect( base.isAfter( test, 'minutes' )).toBeTrue();
+					expect( base.isAfter( test, 'seconds' )).toBeTrue();
+				});
+				it("works on false", function(){
+					expect( test.isAfter( base, 'years' )).toBeFalse();
+					expect( test.isAfter( base, 'months' )).toBeFalse();
+					expect( test.isAfter( base, 'days' )).toBeFalse();
+					expect( test.isAfter( base, 'hours' )).toBeFalse();
+					expect( test.isAfter( base, 'minutes' )).toBeFalse();
+					expect( test.isAfter( base, 'seconds' )).toBeFalse();
+				});
+				it("works on same", function(){
+					expect( test.isAfter( clone, 'years' )).toBeFalse();
+					expect( test.isAfter( clone, 'months' )).toBeFalse();
+					expect( test.isAfter( clone, 'days' )).toBeFalse();
+					expect( test.isAfter( clone, 'hours' )).toBeFalse();
+					expect( test.isAfter( clone, 'minutes' )).toBeFalse();
+					expect( test.isAfter( clone, 'seconds' )).toBeFalse();
+				});
+			});
+
+			describe("isSame", function(){
+				var base = new moment();
+
+				it("works when cloned", function(){
+					var clone = base.clone();
+					expect( base.isSame( clone )).toBeTrue();
+				});
+				it("works when before", function(){
+					var test = base.clone().subtract(5, 'months');
+					expect( base.isSame( test )).toBeFalse();
+				});
+				it("works when after", function(){
+					var test = base.clone().add(5, 'months');
+					expect( base.isSame( test )).toBeFalse();
+				});
+			});
+
+			describe("isBetween", function(){
+				var x = new moment('2001-09-11');
+				var y = new moment('2008-11-27');
+				var z = new moment('2015-01-01');
+
+				it("works on true", function(){
+					expect( y.isBetween( x, z ) ).toBeTrue();
+				});
+				it("works on false", function(){
+					expect( x.isBetween( y, z ) ).toBeFalse();
+				});
+			});
+
+			describe("isDST", function(){
+				it("is a simple wrapper of core Java functionality, without need of testing", function(){});
 			});
 
 		});

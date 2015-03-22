@@ -85,8 +85,26 @@ component displayname="moment" {
 		return dateDiff( part, variables.utcTime, b.utc().getDateTime() );
 	}
 
+	public function getZoneOffset( required string zone ) hint="returns the offset in seconds (considering DST) of the specified zone" {
+		return getTZ( arguments.zone ).getOffset( getTickCount() ) / 1000;
+	}
+
+	public string function getSystemTZ(){
+		return createObject("java", "java.util.TimeZone").getDefault().getId();
+	}
+
+	public struct function getZoneTable(){
+		var list = createObject("java", "java.util.TimeZone").getAvailableIDs();
+		var data = {};
+		for (tz in list){
+			var ms = getTZ( tz ).getOffset( getTickCount() );
+			data[ tz ] = readableOffset( ms );
+		}
+		return data;
+	}
+
 	//===========================================
-	//DISPLAY
+	//TERMINATORS
 	//===========================================
 
 	public function format( mask ) hint="return datetime formatted with specified mask (dateTimeFormat mask rules)" {
@@ -145,6 +163,18 @@ component displayname="moment" {
 		return variables.time.getTime();
 	}
 
+	public function getDateTime() hint="return raw datetime object in current zone" {
+		return variables.time;
+	}
+
+	public string function getZone() hint="return the current zone" {
+		return variables.zone;
+	}
+
+	public numeric function getCurrentOffset() hint="returns the current offset in seconds (considering DST) of the selected zone" {
+		return getZoneOffset( getZone() );
+	}
+
 	//===========================================
 	//QUERY
 	//===========================================
@@ -172,40 +202,6 @@ component displayname="moment" {
 	public boolean function isDST() {
 		var dt = createObject("java", "java.util.Date").init( this.epoch() );
 		return getTZ( variables.zone ).inDayLightTime( dt );
-	}
-
-	//===========================================
-	//RETURNS & MISC
-	//===========================================
-
-	public function getDateTime() hint="return raw datetime object in current zone" {
-		return variables.time;
-	}
-
-	public function getZone() hint="return the current zone" {
-		return variables.zone;
-	}
-
-	public function getCurrentOffset() hint="returns the current offset in seconds (considering DST) of the selected zone" {
-		return getZoneOffset( variables.zone );
-	}
-
-	public function getZoneOffset( zone ) hint="returns the offset in seconds (considering DST) of the specified zone" {
-		return getTZ( arguments.zone ).getOffset( getTickCount() ) / 1000;
-	}
-
-	public string function getSystemTZ(){
-		return createObject("java", "java.util.TimeZone").getDefault().getId();
-	}
-
-	public struct function getZoneTable(){
-		var list = createObject("java", "java.util.TimeZone").getAvailableIDs();
-		var data = {};
-		for (tz in list){
-			var ms = getTZ( tz ).getOffset( getTickCount() );
-			data[ tz ] = readableOffset( ms );
-		}
-		return data;
 	}
 
 	//===========================================

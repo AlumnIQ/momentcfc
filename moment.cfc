@@ -38,20 +38,20 @@ component displayname="moment" {
 		return this;
 	}
 
-	public function tz( zone ) hint="convert datetime to specified zone" {
+	public function tz( required string zone ) hint="convert datetime to specified zone" {
 		variables.time = UTCtoTZ( variables.utcTime, arguments.zone );
 		variables.zone = arguments.zone;
 		return this;
 	}
 
-	public function add( amount, part ){
+	public function add( required numeric amount, required string part ){
 		part = canonicalizeDatePart( part, 'dateAdd' );
 		variables.time = dateAdd( part, amount, variables.time );
 		variables.utcTime = TZtoUTC( variables.time, variables.zone );
 		return this;
 	}
 
-	public function subtract( amount, part ){
+	public function subtract( required numeric amount, required string part ){
 		return add( -1 * amount, part );
 	}
 
@@ -63,21 +63,21 @@ component displayname="moment" {
 		return new moment( variables.time, variables.zone );
 	}
 
-	public moment function min( a, b ) hint="returns whichever moment came first" {
+	public moment function min( required moment a, required moment b ) hint="returns whichever moment came first" {
 		if ( a.isBefore( b ) ){
 			return a;
 		}
 		return b;
 	}
 
-	public moment function max( a, b ) hint="returns whichever moment came last" {
+	public moment function max( required moment a, required moment b ) hint="returns whichever moment came last" {
 		if ( a.isAfter( b ) ){
 			return a;
 		}
 		return b;
 	}
 
-	public numeric function diff( b, part = 'seconds' ) hint="get the difference between the current date and the specified date" {
+	public numeric function diff( required moment b, part = 'seconds' ) hint="get the difference between the current date and the specified date" {
 		part = canonicalizeDatePart( part, 'dateDiff' );
 		if (part == "L"){ //custom support for millisecond diffing... because adobe couldn't be bothered to support it themselves
 			return b.epoch() - this.epoch();
@@ -107,11 +107,11 @@ component displayname="moment" {
 	//TERMINATORS
 	//===========================================
 
-	public function format( mask ) hint="return datetime formatted with specified mask (dateTimeFormat mask rules)" {
+	public function format( required string mask ) hint="return datetime formatted with specified mask (dateTimeFormat mask rules)" {
 		return dateTimeFormat( variables.time, mask );
 	}
 
-	public function from(compare) hint="returns fuzzy-date string e.g. 2 hours ago" {
+	public function from( required moment compare ) hint="returns fuzzy-date string e.g. 2 hours ago" {
 		var _moment = new moment( variables.utcTime, "UTC" );
 		var L = this.min( _moment, compare ).getDateTime();
 		var R = this.max( _moment, compare ).getDateTime();
@@ -179,22 +179,22 @@ component displayname="moment" {
 	//QUERY
 	//===========================================
 
-	public boolean function isBefore( compare, part = 'seconds' ) {
+	public boolean function isBefore( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
 		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == -1);
 	}
 
-	public boolean function isSame( compare, part = 'seconds' ) {
+	public boolean function isSame( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
 		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == 0);
 	}
 
-	public boolean function isAfter( compare, part = 'seconds' ) {
+	public boolean function isAfter( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
 		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == 1);
 	}
 
-	public boolean function isBetween( a, c, part = 'seconds' ) {
+	public boolean function isBetween( required moment a, required moment c, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
 		return ( isBefore(c, part) && isAfter(a, part) );
 	}

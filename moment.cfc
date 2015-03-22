@@ -170,8 +170,8 @@ component displayname="moment" {
 	}
 
 	public boolean function isDST() {
-		var dt = createObject("java", "java.util.Date").init( epoch() );
-		return getZone( variables.zone ).inDayLightTime( dt );
+		var dt = createObject("java", "java.util.Date").init( this.epoch() );
+		return getTZ( variables.zone ).inDayLightTime( dt );
 	}
 
 	//===========================================

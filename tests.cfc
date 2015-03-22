@@ -333,6 +333,16 @@ component extends="testbox.system.BaseSpec"{
 
 		describe("STATICS", function(){
 
+			describe("clone()", function(){
+				it("returns a moment", function(){
+					var test = new moment();
+					var clone = test.clone();
+
+					expect( clone ).toBeComponent();
+					expect( clone.isSame( test ) ).toBeTrue();
+				});
+			});
+
 			describe("min()", function(){
 
 				it("works with winner on left", function(){

@@ -85,6 +85,18 @@ Get a list of all world time zones and their displayable offsets. This lists the
 
 ## Basic Date & Time Methods
 
+#### Init
+
+The constructor takes 0, 1, or 2 arguments.
+
+- `new moment()` Use the current system time and the current system time zone
+- `new moment( now() )` Use the specified time (argument) and the current system time zone
+- `new moment( now(), 'America/Pacific' )` Use the specified time (argument) and the specified time zone (argument)
+
+The datetime argument accepts a native CFML datetime object (e.g. `now()` or `createDateTime()`) or just a string (e.g. `2008-11-27 13:47`).
+
+The time zone strings that moment expects are the internationalized strings, such as "America/New_York". You can find a full list [here](http://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List), or have moment generate it for you -- but more on that later.
+
 #### Add/Subtract some time
 
 The syntax and format masks for `dateAdd()` aren't that hard to remember, but they also aren't very readable. We can do better...

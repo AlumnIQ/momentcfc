@@ -578,13 +578,26 @@ component extends="testbox.system.BaseSpec"{
 		describe("TERMINATORS", function(){
 
 			describe("format()", function(){
-				it("does its thing", function(){
+				it("works for custom masks", function(){
 					var base = now();
 					var mask = 'yyyy-mm-dd hh:nn:sstt';
 					var compare = dateTimeFormat(base, mask);
 					var test = new moment( base );
 
 					expect( test.format( mask ) ).toBe( compare );
+				});
+				it("works with the mysql mask", function(){
+					var base = now();
+					var compare = dateTimeFormat( base, 'yyyy-mm-dd HH:nn:ss' );
+					var test = new moment( base );
+
+					expect( test.format( 'mysql' )).toBe( compare );
+				});
+				it("works with the mssql mask", function(){
+					var base = now();
+					var compare = dateTimeFormat(base, 'yyyy-mm-dd') & 'T' & dateTimeFormat(base, 'HH:nn:ss') & 'Z';
+					var test = new moment( base );
+					expect( test.format( 'mssql' )).toBe( compare );
 				});
 			});
 

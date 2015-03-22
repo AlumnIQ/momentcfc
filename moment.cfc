@@ -5,6 +5,8 @@
 	With help from: @seancorfield, @ryanguill
 	And contributions (witting or otherwise) from:
 	 - Ryan Heldt: http://www.ryanheldt.com/post.cfm/working-with-fuzzy-dates-and-times
+	 - Ben Nadel: http://www.bennadel.com/blog/2501-converting-coldfusion-date-time-values-into-iso-8601-time-strings.htm
+
 */
 component displayname="moment" {
 
@@ -108,6 +110,17 @@ component displayname="moment" {
 	//===========================================
 
 	public function format( required string mask ) hint="return datetime formatted with specified mask (dateTimeFormat mask rules)" {
+		switch( mask ){
+			case 'mysql':
+				mask = 'yyyy-mm-dd HH:nn:ss';
+				break;
+			case 'iso8061':
+			case 'mssql':
+				return dateTimeFormat(variables.time, 'yyyy-mm-dd') & 'T' & dateTimeFormat(variables.time, 'HH:nn:ss') & 'Z';
+			default:
+				mask = mask;
+		}
+
 		return dateTimeFormat( variables.time, mask );
 	}
 

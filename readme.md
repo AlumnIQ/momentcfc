@@ -27,51 +27,58 @@ Create a timestamp in the US-Eastern time zone:
 
 When you don't pass a time zone argument, the current system time zone is used. When you don't pass a time argument, the current system time is used. `new moment()` and `new moment( '2008-11-27 13:47:00' )` and `new moment( '2008-11-27 13:47:00', 'America/New_York' )` are all equally valid.
 
-Convert a moment's current time to UTC:
+#### UTC
+
+Convert a moment's current time to its UTC value (also updates the internal time zone value to "UTC"):
 
 	x.utc();
 
-And get it back as a readable string:
+#### TZ
 
-	x.format( 'yyyy-mm-dd hh:nna' );
-	//=> 2008-11-27 10:06AM
+Instead of UTC, let's see what time that would have been in Phoenix using the `.tz()` method to change our moment to another time zone:
 
-
-Or instead of UTC, let's see what time that would have been in Phoenix using the `.tz()` method:
-
-	new moment( '2008-11-27 13:47:00', 'America/New_York' ).tz( 'America/Phoenix' ).format( 'hh:nn' );
+	new moment( '2008-11-27 13:47', 'America/New_York' ).tz( 'America/Phoenix' ).format( 'hh:nn' );
 	//=> 03:06
 
 And yes, all of the above methods (constructor as well as `.utc()` and `.tz()`) are chainable.
 
-#### Curious if your current moment is during Daylight Saving Time?
+#### isDST
 
-	dst = new moment().isDST();
-	//=> true/false
+Curious if your current moment is during Daylight Saving Time?
 
-#### If you want to get a time zone's offset in seconds
+	dst = new moment( '2008-11-27', 'America/New_York' ).isDST();
+	//=> false
 
-This _does_ respect Daylight Saving Time:
+#### getZoneOffset
+
+Return a time zone's current offset in seconds. This _does_ respect Daylight Saving Time:
 
 	offset = new moment().getZoneOffset( 'Australia/Perth' );
+	//=> 28800
 
-You can get the current offset of a moment, without knowing its time zone, with `.getCurrentOffset()`:
+#### getCurrentOffset
+
+Get the current offset of a moment in seconds, without knowing its time zone:
 
 	offset = myMoment.getCurrentOffset();
 
-#### Want the current time zone?
+#### getZone
 
-	zone = myMoment.getZone();
+Get the current time zone from the moment:
+
+	myMoment.getZone();
 	//=> "America/New_York"
 
-#### Want to know your system time zone?
+#### getSystemTZ
 
-	systemZone = myMoment.getSystemTZ();
+Get your system time zone:
+
+	myMoment.getSystemTZ();
 	//=> "America/New_York"
 
-#### Need a list of all world time zones and their displayable offsets?
+#### getZoneTable
 
-This shows the zone's current offset, respecting their Daylight Saving Time rules:
+Get a list of all world time zones and their displayable offsets. This lists the zone's current offset, respecting their Daylight Saving Time rules:
 
 	tbl = new moment().getZoneTable();
 	//=> { "America/New_York": "-4:00", ... }
@@ -205,6 +212,14 @@ Determines if the current moment is between the two argument moments, at least t
 	betwixt = y.isBetween( y, 'minutes' );
 	//=> true
 
+#### getDateTime
+
+After all is said and done, sometimes you just need the raw datetime object back. This'll give it to you.
+
+	raw = new moment( '2008-11-27 13:47' ).getDateTime();
+	//=> {ts '2008-11-27 13:47:00'}
+
+####
 
 ## Compatibility
 

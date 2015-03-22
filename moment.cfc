@@ -82,7 +82,7 @@ component displayname="moment" {
 		if (part == "L"){ //custom support for millisecond diffing... because adobe couldn't be bothered to support it themselves
 			return b.epoch() - this.epoch();
 		}
-		return dateDiff( part, variables.utcTime, b.utc().getDateTime() );
+		return dateDiff( part, variables.utcTime, b.clone().utc().getDateTime() );
 	}
 
 	public function getZoneOffset( required string zone ) hint="returns the offset in seconds (considering DST) of the specified zone" {
@@ -113,8 +113,8 @@ component displayname="moment" {
 
 	public function from( required moment compare ) hint="returns fuzzy-date string e.g. 2 hours ago" {
 		var _moment = new moment( variables.utcTime, "UTC" );
-		var L = this.min( _moment, compare ).getDateTime();
-		var R = this.max( _moment, compare ).getDateTime();
+		var L = this.min( _moment, compare.clone().utc() ).getDateTime();
+		var R = this.max( _moment, compare.clone().utc() ).getDateTime();
 		var diff = 0;
 		//Seconds
 		if (dateDiff('s', L, R) < 60){
@@ -155,7 +155,7 @@ component displayname="moment" {
 	}
 
 	public function fromNow() {
-		var nnow = new moment().utc().getDateTime();
+		var nnow = new moment().clone().utc().getDateTime();
 		return from( nnow );
 	}
 
@@ -181,17 +181,17 @@ component displayname="moment" {
 
 	public boolean function isBefore( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
-		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == -1);
+		return (dateCompare( variables.utcTime, compare.clone().utc().getDateTime(), part ) == -1);
 	}
 
 	public boolean function isSame( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
-		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == 0);
+		return (dateCompare( variables.utcTime, compare.clone().utc().getDateTime(), part ) == 0);
 	}
 
 	public boolean function isAfter( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
-		return (dateCompare( variables.utcTime, compare.utc().getDateTime(), part ) == 1);
+		return (dateCompare( variables.utcTime, compare.clone().utc().getDateTime(), part ) == 1);
 	}
 
 	public boolean function isBetween( required moment a, required moment c, part = 'seconds' ) {

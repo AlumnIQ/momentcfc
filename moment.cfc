@@ -93,11 +93,6 @@ component displayname="moment" {
 		return dateTimeFormat( variables.time, mask );
 	}
 
-	public function fromNow() {
-		var nnow = new moment().utc().getDateTime();
-		return from( nnow );
-	}
-
 	public function from(compare) hint="returns fuzzy-date string e.g. 2 hours ago" {
 		var _moment = new moment( variables.utcTime, "UTC" );
 		var L = this.min( _moment, compare ).getDateTime();
@@ -139,6 +134,11 @@ component displayname="moment" {
 			diff = dateDiff("yyyy", L, R);
 			return diff & " year#(diff gt 1 ? 's' : '')# ago";
 		}
+	}
+
+	public function fromNow() {
+		var nnow = new moment().utc().getDateTime();
+		return from( nnow );
 	}
 
 	public function epoch() hint="returns the number of milliseconds since 1/1/1970 (local). Call .utc() first to get utc epoch" {

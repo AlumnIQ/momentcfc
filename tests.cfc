@@ -2,7 +2,7 @@ component extends="testbox.system.BaseSpec"{
 
 	function run(){
 
-		describe("INIT", function(){
+		describe("CONSTRUCTOR", function(){
 
 			it("uses current time and local tz when no-args", function(){
 				var test = new moment();

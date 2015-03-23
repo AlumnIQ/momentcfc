@@ -10,9 +10,9 @@
 */
 component displayname="moment" {
 
-	variables.zone = "";
-	variables.time = "";
-	variables.utcTime = "";
+	variables.zone = '';
+	variables.time = '';
+	variables.utcTime = '';
 
 	/*
 		Call:
@@ -36,7 +36,7 @@ component displayname="moment" {
 
 	public function utc() hint="convert datetime to utc zone" {
 		variables.time = variables.utcTime;
-		variables.zone = "UTC";
+		variables.zone = 'UTC';
 		return this;
 	}
 
@@ -81,7 +81,7 @@ component displayname="moment" {
 
 	public numeric function diff( required moment b, part = 'seconds' ) hint="get the difference between the current date and the specified date" {
 		part = canonicalizeDatePart( part, 'dateDiff' );
-		if (part == "L"){ //custom support for millisecond diffing... because adobe couldn't be bothered to support it themselves
+		if (part == 'L'){ //custom support for millisecond diffing... because adobe couldn't be bothered to support it themselves
 			return b.epoch() - this.epoch();
 		}
 		return dateDiff( part, variables.utcTime, b.clone().utc().getDateTime() );
@@ -92,11 +92,11 @@ component displayname="moment" {
 	}
 
 	public string function getSystemTZ(){
-		return createObject("java", "java.util.TimeZone").getDefault().getId();
+		return createObject('java', 'java.util.TimeZone').getDefault().getId();
 	}
 
 	public struct function getZoneTable(){
-		var list = createObject("java", "java.util.TimeZone").getAvailableIDs();
+		var list = createObject('java', 'java.util.TimeZone').getAvailableIDs();
 		var data = {};
 		for (tz in list){
 			//display *CURRENT* offsets
@@ -126,7 +126,7 @@ component displayname="moment" {
 	}
 
 	public function from( required moment compare ) hint="returns fuzzy-date string e.g. 2 hours ago" {
-		var _moment = new moment( variables.utcTime, "UTC" );
+		var _moment = new moment( variables.utcTime, 'UTC' );
 		var L = this.min( _moment, compare.clone().utc() ).getDateTime();
 		var R = this.max( _moment, compare.clone().utc() ).getDateTime();
 		var diff = 0;
@@ -152,18 +152,18 @@ component displayname="moment" {
 		//Weeks
 		diff = dateDiff('ww', L, R);
 		if (diff == 1){
-			return "Last week";
+			return 'Last week';
 		}else if (diff lt 4){
-			return diff & " weeks ago";
+			return diff & ' weeks ago';
 		}
 		//Months/Years
-		diff = dateDiff("m", L, R);
+		diff = dateDiff('m', L, R);
 		if (diff < 12){
 			return diff & " month#(diff gt 1 ? 's' : '')# ago";
 		}else if (diff == 12){
-			return "Last year";
+			return 'Last year';
 		}else{
-			diff = dateDiff("yyyy", L, R);
+			diff = dateDiff('yyyy', L, R);
 			return diff & " year#(diff gt 1 ? 's' : '')# ago";
 		}
 	}
@@ -214,7 +214,7 @@ component displayname="moment" {
 	}
 
 	public boolean function isDST() {
-		var dt = createObject("java", "java.util.Date").init( this.epoch() );
+		var dt = createObject('java', 'java.util.Date').init( this.epoch() );
 		return getTZ( variables.zone ).inDayLightTime( dt );
 	}
 
@@ -227,7 +227,7 @@ component displayname="moment" {
 	}
 
 	private function getTZ( id ){
-		return createObject("java", "java.util.TimeZone").getTimezone( id );
+		return createObject('java', 'java.util.TimeZone').getTimezone( id );
 	}
 
 	private function TZtoUTC( time, tz = getSystemTZ() ){
@@ -247,64 +247,64 @@ component displayname="moment" {
 	private function readableOffset( offset ){
 		var h = offset / 1000 / 60 / 60; //raw hours (decimal) offset
 		var hh = fix( h ); //int hours
-		var mm = ( hh == h ? ":00" : ":" & abs(round((h-hh)*60)) ); //hours modulo used to determine minutes
-		var rep = ( h >= 0 ? "+" : "" ) & hh & mm;
+		var mm = ( hh == h ? ':00' : ':' & abs(round((h-hh)*60)) ); //hours modulo used to determine minutes
+		var rep = ( h >= 0 ? '+' : '' ) & hh & mm;
 		return rep;
 	}
 
 	private function canonicalizeDatePart( part, method = 'dateAdd' ){
-		var isDateAdd = (lcase(method) == "dateadd");
-		var isDateDiff = (lcase(method) == "datediff");
-		var isDateCompare = (lcase(method) == "datecompare");
+		var isDateAdd = (lcase(method) == 'dateadd');
+		var isDateDiff = (lcase(method) == 'datediff');
+		var isDateCompare = (lcase(method) == 'datecompare');
 
 		switch( lcase(arguments.part) ){
-			case "years":
-			case "year":
-			case "y":
-				return "yyyy";
-			case "quarters":
-			case "quarter":
-			case "q":
-				if (!isDateCompare) return "q";
-				throw(message="DateCompare doesn't support Quarter precision");
-			case "months":
-			case "month":
-			case "m":
-				return "m";
-			case "weeks":
-			case "week":
-			case "w":
-				if (!isDateCompare) return "ww";
-				throw(message="DateCompare doesn't support Week precision");
-			case "days":
-			case "day":
-			case "d":
-				return "d";
-			case "weekdays":
-			case "weekday":
-			case "wd":
-				if (!isDateCompare) return "w";
-				throw(message="DateCompare doesn't support Weekday precision");
-			case "hours":
-			case "hour":
-			case "h":
-				return "h";
-			case "minutes":
-			case "minute":
-			case "n":
-				return "n";
-			case "seconds":
-			case "second":
-			case "s":
-				return "s";
-			case "milliseconds":
-			case "millisecond":
-			case "ms":
-				if (isDateAdd) return "L";
-				if (isDateDiff) return "L"; //custom support for ms diffing is provided interally, because adobe sucks
-				throw(message="#method# doesn't support Millisecond precision");
+			case 'years':
+			case 'year':
+			case 'y':
+				return 'yyyy';
+			case 'quarters':
+			case 'quarter':
+			case 'q':
+				if (!isDateCompare) return 'q';
+				throw(message='DateCompare doesn''t support Quarter precision');
+			case 'months':
+			case 'month':
+			case 'm':
+				return 'm';
+			case 'weeks':
+			case 'week':
+			case 'w':
+				if (!isDateCompare) return 'ww';
+				throw(message='DateCompare doesn''t support Week precision');
+			case 'days':
+			case 'day':
+			case 'd':
+				return 'd';
+			case 'weekdays':
+			case 'weekday':
+			case 'wd':
+				if (!isDateCompare) return 'w';
+				throw(message='DateCompare doesn''t support Weekday precision');
+			case 'hours':
+			case 'hour':
+			case 'h':
+				return 'h';
+			case 'minutes':
+			case 'minute':
+			case 'n':
+				return 'n';
+			case 'seconds':
+			case 'second':
+			case 's':
+				return 's';
+			case 'milliseconds':
+			case 'millisecond':
+			case 'ms':
+				if (isDateAdd) return 'L';
+				if (isDateDiff) return 'L'; //custom support for ms diffing is provided interally, because adobe sucks
+				throw(message='#method# doesn''t support Millisecond precision');
 		}
-		throw(message="Unrecognized Date Part: `#part#`");
+		throw(message='Unrecognized Date Part: `#part#`');
 	}
 
 }

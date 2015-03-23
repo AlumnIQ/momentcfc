@@ -4,14 +4,27 @@
 <cfparam name="url.recurse"        default="true" type="boolean">
 <cfparam name="url.bundles"        default="">
 <cfparam name="url.labels"              default="">
-<cfparam name="url.reportpath"          default="#expandPath( "/test/results" )#">
+<cfparam name="url.reportpath"          default="#expandPath( "../results" )#">
 <cfscript>
+//normalize testbox versions (older versions used testbox.system.testing.TestBox)
+function getTestBox(){
+	try {
+		return new testbox.system.testing.TestBox( argumentCollection=arguments );
+	} catch(any e) {
+		try {
+			return new testbox.system.TestBox( argumentCollection=arguments );
+		} catch(any e) {
+			rethrow;
+		}
+	}
+}
+
 // prepare for tests for bundles or directories
 if( len( url.bundles ) ){
-     testbox = new testbox.system.testing.TestBox( bundles=url.bundles, labels=url.labels );
+     testbox = getTestBox( bundles=url.bundles, labels=url.labels );
 }
 else{
-     testbox = new testbox.system.testing.TestBox( directory={ mapping=url.directory, recurse=url.recurse}, labels=url.labels );
+     testbox = getTestBox( directory={ mapping=url.directory, recurse=url.recurse}, labels=url.labels );
 }
 // Run Tests using correct reporter
 results = testbox.run( reporter=url.reporter );

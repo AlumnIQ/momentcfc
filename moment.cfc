@@ -87,7 +87,7 @@ component displayname="moment" {
 		return dateDiff( part, variables.utcTime, b.clone().utc().getDateTime() );
 	}
 
-	public function getZoneOffset( required string zone ) hint="returns the offset in seconds (considering DST) of the specified zone" {
+	public function getZoneCurrentOffset( required string zone ) hint="returns the offset in seconds (considering DST) of the specified zone" {
 		return getTZ( arguments.zone ).getOffset( getSystemTimeMS() ) / 1000;
 	}
 
@@ -186,7 +186,7 @@ component displayname="moment" {
 	}
 
 	public numeric function getCurrentOffset() hint="returns the current offset in seconds (considering DST) of the selected zone" {
-		return getZoneOffset( getZone() );
+		return getZoneCurrentOffset( getZone() );
 	}
 
 	//===========================================

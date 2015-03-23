@@ -566,11 +566,18 @@ component extends="testbox.system.BaseSpec" {
 
 			});
 
-			describe("getZoneOffset()", function(){
+			describe("getZoneCurrentOffset()", function(){
 				it("returns the offset in seconds (considering DST) of the specified zone", function(){
-					var test = moment( now(), 'America/New_York' );
-					var dst = test.isDST();
-					expect( test.getZoneOffset( 'America/New_York' ) ).toBe( dst ? -14400 : -18000 );
+					var offset4h = -4*60*60;
+					var offset5h = -5*60*60;
+
+					var m = moment( now(), 'America/New_York' );
+					var expectedOffset = m.isDST() ? offset4h : offset5h;
+
+					expect( m.getZoneCurrentOffset( 'America/New_York' ) ).toBe( expectedOffset );
+
+					debug( m.getDateTime(), 'before-convert' );
+					debug( m.utc().getDateTime(), 'after-convert' );
 				});
 			});
 

@@ -195,11 +195,11 @@ Curious if your current moment is during Daylight Saving Time?
 	dst = new moment( '2008-11-27', 'America/New_York' ).isDST();
 	//=> false
 
-#### getZoneOffset
+#### getZoneCurrentOffset
 
 Return a time zone's current offset in seconds. This _does_ respect Daylight Saving Time:
 
-	offset = new moment().getZoneOffset( 'Australia/Perth' );
+	offset = new moment().getZoneCurrentOffset( 'Australia/Perth' );
 	//=> 28800
 
 #### getCurrentOffset

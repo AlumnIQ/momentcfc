@@ -51,13 +51,13 @@ component extends="testbox.system.BaseSpec" {
 		describe("MUTATORS", function(){
 
 			describe("utc()", function(){
-				it("changes the time zone to UTC and updates the time", function(){
-					var compare = now();
-					var test = moment();
-					test.utc();
+				it("correctly calculates the utc value", function(){
+					outsideDST = moment('2015-02-01 00:00:00', 'America/New_York').utc();
+					insideDST = moment('2015-03-20 00:00:00', 'America/New_York').utc();
 
-					expect( test.getZone() ).toBe( "UTC" );
-					expect( test.getDateTime() ).notToBe( compare );
+					expect( outsideDST.getZone() ).toBe( "UTC" );
+					expect( outsideDST.format("HH:nn:ss") ).toBe( '05:00:00' );
+					expect( insideDST.format("HH:nn:ss") ).toBe( '04:00:00' );
 				});
 			});
 

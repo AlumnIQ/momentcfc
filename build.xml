@@ -153,7 +153,7 @@ Valid values are:
   </target>
 
   <target description="Make output directories and run the TestBox task" name="run-tests-testbox">
-    <get dest="${output.dir}/results.txt" src="http://${server.name}:${server.port}/${test.project}/tests/ci/testbox-runner.cfm?directory=${testbox.directory}&amp;reporter=text&amp;reportPath=${basedir}/${output.dir}" verbose="true" />
+    <get dest="${output.dir}/results.txt" src="http://${server.name}:${server.port}/${test.project}/tests/ci/testbox-runner.cfm?directory=${test.project}.${testbox.directory}&amp;reporter=text&amp;reportPath=${basedir}/${output.dir}" verbose="true" />
     <concat><path path="${output.dir}/output.txt" /></concat>
   </target>
 

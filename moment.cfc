@@ -6,7 +6,7 @@
 	And contributions (witting or otherwise) from:
 	 - Ryan Heldt: http://www.ryanheldt.com/post.cfm/working-with-fuzzy-dates-and-times
 	 - Ben Nadel: http://www.bennadel.com/blog/2501-converting-coldfusion-date-time-values-into-iso-8601-time-strings.htm
-
+	 - Zack Pitts: http://stackoverflow.com/a/16309780/751
 */
 component displayname="moment" {
 
@@ -88,7 +88,7 @@ component displayname="moment" {
 	}
 
 	public function getZoneOffset( required string zone ) hint="returns the offset in seconds (considering DST) of the specified zone" {
-		return getTZ( arguments.zone ).getOffset( getTickCount() ) / 1000;
+		return getTZ( arguments.zone ).getOffset( getSystemTimeMS() ) / 1000;
 	}
 
 	public string function getSystemTZ(){
@@ -99,7 +99,8 @@ component displayname="moment" {
 		var list = createObject("java", "java.util.TimeZone").getAvailableIDs();
 		var data = {};
 		for (tz in list){
-			var ms = getTZ( tz ).getOffset( getTickCount() );
+			//display *CURRENT* offsets
+			var ms = getTZ( tz ).getOffset( getSystemTimeMS() );
 			data[ tz ] = readableOffset( ms );
 		}
 		return data;
@@ -220,6 +221,10 @@ component displayname="moment" {
 	//===========================================
 	//INTERNAL HELPERS
 	//===========================================
+
+	private function getSystemTimeMS(){
+		return createObject('java', 'java.lang.System').currentTimeMillis();
+	}
 
 	private function getTZ( id ){
 		return createObject("java", "java.util.TimeZone").getTimezone( id );

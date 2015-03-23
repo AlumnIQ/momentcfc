@@ -207,6 +207,15 @@ Return a time zone's current offset in seconds. This _does_ respect Daylight Sav
 Get the current offset of a moment in seconds, without knowing its time zone:
 
 	offset = myMoment.getCurrentOffset();
+#### getArbitraryTimeOffset
+
+Get the offset that was in use at the time in question.
+
+	offset = myMoment.getArbitraryTimeOffset( '2015-02-01', 'America/New_York' );
+	//=> -18000 because Feb 1 is before DST starts
+
+	offset = myMoment.getArbitraryTimeOffset( '2015-03-20', 'America/New_York' );
+	//=> -14400 because Mar 20 is during DST
 
 #### getZone
 

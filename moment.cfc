@@ -4,6 +4,7 @@
 	Inspired by (but not a strict port of) moment.js: http://momentjs.com/
 	With help from: @seancorfield, @ryanguill
 	And contributions (witting or otherwise) from:
+	 - Dan Switzer: https://github.com/CounterMarch/moment.cfc/issues/5
 	 - Ryan Heldt: http://www.ryanheldt.com/post.cfm/working-with-fuzzy-dates-and-times
 	 - Ben Nadel: http://www.bennadel.com/blog/2501-converting-coldfusion-date-time-values-into-iso-8601-time-strings.htm
 	 - Zack Pitts: http://stackoverflow.com/a/16309780/751
@@ -106,6 +107,14 @@ component displayname="moment" {
 		return data;
 	}
 
+	public function getArbitraryTimeOffset( time, zone ) hint="returns what the offset was at that specific moment"{
+		var timezone = getTZ( zone );
+		//can't use a moment for this math b/c it would cause infinite recursion: constructor uses this method
+		var epic = createDateTime(1970, 1, 1, 0, 0, 0);
+		var seconds = timezone.getOffset( javacast('long', dateDiff('s', epic, arguments.time)*1000) ) / 1000;
+		return seconds;
+	}
+
 	//===========================================
 	//TERMINATORS
 	//===========================================
@@ -186,7 +195,7 @@ component displayname="moment" {
 	}
 
 	public numeric function getCurrentOffset() hint="returns the current offset in seconds (considering DST) of the selected zone" {
-		return getZoneCurrentOffset( getZone() );
+		return getArbitraryTimeOffset( variables.time, variables.zone );
 	}
 
 	//===========================================
@@ -231,16 +240,12 @@ component displayname="moment" {
 	}
 
 	private function TZtoUTC( time, tz = getSystemTZ() ){
-		var timezone = getTZ( tz );
-		var ms = timezone.getOffset( getTickCount() ); //get this timezone's current offset from UTC
-		var seconds = ms / 1000;
+		var seconds = getArbitraryTimeOffset( time, tz );
 		return dateAdd( 's', -1 * seconds, time );
 	}
 
 	private function UTCtoTZ( required time, required string tz ){
-		var timezone = getTZ( tz );
-		var ms = timezone.getOffset( getTickCount() ); //get this timezone's current offset from UTC
-		var seconds = ms / 1000;
+		var seconds = getArbitraryTimeOffset( time, tz );
 		return dateAdd( 's', seconds, time );
 	}
 

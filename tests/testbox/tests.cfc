@@ -733,12 +733,11 @@ component extends="testbox.system.BaseSpec" {
 				});
 			});
 
-			describe("getCurrentOffset()", function(){
+			describe("getOffset()", function(){
 				it("returns the correct offset", function(){
 					//this may be troublesome if tested in another zone... we'll see!
 					var test = moment( now(), 'America/New_York' );
-					var dst = test.isDST();
-					expect( test.getCurrentOffset() ).toBe( dst ? -14400 : -18000 );
+					expect( test.getOffset() ).toBe( test.isDST() ? -14400 : -18000 );
 				});
 			});
 

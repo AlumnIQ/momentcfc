@@ -202,11 +202,12 @@ Return a time zone's current offset in seconds. This _does_ respect Daylight Sav
 	offset = new moment().getZoneCurrentOffset( 'Australia/Perth' );
 	//=> 28800
 
-#### getCurrentOffset
+#### getOffset
 
 Get the current offset of a moment in seconds, without knowing its time zone:
 
-	offset = myMoment.getCurrentOffset();
+	offset = myMoment.getOffset();
+
 #### getArbitraryTimeOffset
 
 Get the offset that was in use at the time in question.

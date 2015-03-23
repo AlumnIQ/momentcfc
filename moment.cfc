@@ -194,7 +194,7 @@ component displayname="moment" {
 		return variables.zone;
 	}
 
-	public numeric function getCurrentOffset() hint="returns the current offset in seconds (considering DST) of the selected zone" {
+	public numeric function getOffset() hint="returns the offset in seconds (considering DST) of the current moment" {
 		return getArbitraryTimeOffset( variables.time, variables.zone );
 	}
 

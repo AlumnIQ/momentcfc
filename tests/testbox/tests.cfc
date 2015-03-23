@@ -1,11 +1,24 @@
-component extends="testbox.system.BaseSpec"{
+component extends="testbox.system.BaseSpec" {
 
 	function run(){
+
+		//normalize moment instance creation over various environments
+		var moment = function(){
+			try {
+				return new moment(argumentCollection=arguments);
+			} catch(any e) {
+				try {
+					return new momentcfc.moment(argumentCollection=arguments);
+				} catch(any e) {
+					throw(message="can't find moment!");
+				}
+			}
+		};
 
 		describe("CONSTRUCTOR", function(){
 
 			it("uses current time and local tz when no-args", function(){
-				var test = new moment();
+				var test = moment();
 				var compare = now();
 				var localTZ = createObject("java", "java.util.TimeZone").getDefault().getId();
 
@@ -14,7 +27,7 @@ component extends="testbox.system.BaseSpec"{
 			});
 
 			it("uses local tz when 1-arg", function(){
-				var test = new moment( now() );
+				var test = moment( now() );
 				var compare = createObject("java", "java.util.TimeZone").getDefault().getId();
 
 				expect( test.getZone() ).toBe( compare );
@@ -22,14 +35,14 @@ component extends="testbox.system.BaseSpec"{
 
 			it("uses args when 2-args", function(){
 				var compare = now();
-				var test = new moment( compare, "UTC" );
+				var test = moment( compare, "UTC" );
 
 				expect( test.getZone() ).toBe( "UTC" );
 				expect( test.getDateTime() ).toBe( compare );
 			});
 
 			it("accepts a datetime string as the first arg", function(){
-				var test = new moment( '2008-11-27 6:06' );
+				var test = moment( '2008-11-27 6:06' );
 				expect( test ).toBeComponent();
 			});
 
@@ -40,7 +53,7 @@ component extends="testbox.system.BaseSpec"{
 			describe("utc()", function(){
 				it("changes the time zone to UTC and updates the time", function(){
 					var compare = now();
-					var test = new moment();
+					var test = moment();
 					test.utc();
 
 					expect( test.getZone() ).toBe( "UTC" );
@@ -51,8 +64,8 @@ component extends="testbox.system.BaseSpec"{
 			describe("tz()", function(){
 				it("changes the timezone and the datetime", function(){
 					var compare = now();
-					var test = new moment( compare );
-					var utc = new moment().utc();
+					var test = moment( compare );
+					var utc = moment().utc();
 					test.tz( "Pacific/Apia" );
 
 					expect( test.getZone() ).toBe( "Pacific/Apia" );
@@ -66,9 +79,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: years, year, and y", function(){
 					var compare = now();
 					var compare2 = dateAdd('yyyy', 1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'years').getDateTime() ).toBe( compare2 );
@@ -79,9 +92,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: quarters, quarter, and q", function(){
 					var compare = now();
 					var compare2 = dateAdd('q', 1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'quarters').getDateTime() ).toBe( compare2 );
@@ -92,9 +105,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: months, month, and m", function(){
 					var compare = now();
 					var compare2 = dateAdd('m', 1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'months').getDateTime() ).toBe( compare2 );
@@ -105,9 +118,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: days, day, and d", function(){
 					var compare = now();
 					var compare2 = dateAdd('d', 1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'days').getDateTime() ).toBe( compare2 );
@@ -118,9 +131,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: weekdays, weekday, and wd", function(){
 					var compare = now();
 					var compare2 = dateAdd('w', 1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'weekdays').getDateTime() ).toBe( compare2 );
@@ -131,9 +144,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: weeks, week, and w", function(){
 					var compare = now();
 					var compare2 = dateAdd('ww', 1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'weeks').getDateTime() ).toBe( compare2 );
@@ -144,9 +157,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: hours, hour, and h", function(){
 					var compare = now();
 					var compare2 = dateAdd('h', 1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'hours').getDateTime() ).toBe( compare2 );
@@ -157,9 +170,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: minutes, minute, and n", function(){
 					var compare = now();
 					var compare2 = dateAdd('n', 1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'minutes').getDateTime() ).toBe( compare2 );
@@ -170,9 +183,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: seconds, second, and s", function(){
 					var compare = now();
 					var compare2 = dateAdd('s', 1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'seconds').getDateTime() ).toBe( compare2 );
@@ -183,9 +196,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: milliseconds, millisecond, and ms", function(){
 					var compare = now();
 					var compare2 = dateAdd('l', 1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.add(1, 'milliseconds').getDateTime() ).toBe( compare2 );
@@ -200,9 +213,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: years, year, and y", function(){
 					var compare = now();
 					var compare2 = dateAdd('yyyy', -1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'years').getDateTime() ).toBe( compare2 );
@@ -213,9 +226,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: quarters, quarter, and q", function(){
 					var compare = now();
 					var compare2 = dateAdd('q', -1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'quarters').getDateTime() ).toBe( compare2 );
@@ -226,9 +239,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: months, month, and m", function(){
 					var compare = now();
 					var compare2 = dateAdd('m', -1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'months').getDateTime() ).toBe( compare2 );
@@ -239,9 +252,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: days, day, and d", function(){
 					var compare = now();
 					var compare2 = dateAdd('d', -1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'days').getDateTime() ).toBe( compare2 );
@@ -252,9 +265,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: weekdays, weekday, and wd", function(){
 					var compare = now();
 					var compare2 = dateAdd('w', -1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'weekdays').getDateTime() ).toBe( compare2 );
@@ -265,9 +278,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: weeks, week, and w", function(){
 					var compare = now();
 					var compare2 = dateAdd('ww', -1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'weeks').getDateTime() ).toBe( compare2 );
@@ -278,9 +291,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: hours, hour, and h", function(){
 					var compare = now();
 					var compare2 = dateAdd('h', -1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'hours').getDateTime() ).toBe( compare2 );
@@ -291,9 +304,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: minutes, minute, and n", function(){
 					var compare = now();
 					var compare2 = dateAdd('n', -1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'minutes').getDateTime() ).toBe( compare2 );
@@ -304,9 +317,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: seconds, second, and s", function(){
 					var compare = now();
 					var compare2 = dateAdd('s', -1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'seconds').getDateTime() ).toBe( compare2 );
@@ -317,9 +330,9 @@ component extends="testbox.system.BaseSpec"{
 				it("supports masks: milliseconds, millisecond, and ms", function(){
 					var compare = now();
 					var compare2 = dateAdd('l', -1, compare);
-					var test1 = new moment( compare );
-					var test2 = new moment( compare );
-					var test3 = new moment( compare );
+					var test1 = moment( compare );
+					var test2 = moment( compare );
+					var test3 = moment( compare );
 
 					expect( test1.getDateTime() ).toBe( compare );
 					expect( test1.subtract(1, 'milliseconds').getDateTime() ).toBe( compare2 );
@@ -335,7 +348,7 @@ component extends="testbox.system.BaseSpec"{
 
 			describe("clone()", function(){
 				it("returns a moment", function(){
-					var test = new moment();
+					var test = moment();
 					var clone = test.clone();
 
 					expect( clone ).toBeComponent();
@@ -346,15 +359,15 @@ component extends="testbox.system.BaseSpec"{
 			describe("min()", function(){
 
 				it("works with winner on left", function(){
-					var a = new moment().subtract(1, 'day');
-					var b = new moment();
+					var a = moment().subtract(1, 'day');
+					var b = moment();
 
 					expect( b.min( a, b ) ).toBe( a );
 				});
 
 				it("works with winner on right", function(){
-					var a = new moment().subtract(1, 'day');
-					var b = new moment();
+					var a = moment().subtract(1, 'day');
+					var b = moment();
 
 					expect( b.min( b, a ) ).toBe( a );
 				});
@@ -364,15 +377,15 @@ component extends="testbox.system.BaseSpec"{
 			describe("max()", function(){
 
 				it("works with winner on left", function(){
-					var a = new moment().add(1, 'day');
-					var b = new moment();
+					var a = moment().add(1, 'day');
+					var b = moment();
 
 					expect( b.min( a, b ) ).toBe( a );
 				});
 
 				it("works with winner on right", function(){
-					var a = new moment().add(1, 'day');
-					var b = new moment();
+					var a = moment().add(1, 'day');
+					var b = moment();
 
 					expect( b.min( b, a ) ).toBe( a );
 				});
@@ -385,11 +398,11 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var pushA = dateAdd('yyyy', 20, base );
 					var pushB = dateAdd('yyyy', -20, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
+					var test1 = moment( base );
+					var test2 = moment( pushA );
+					var test3 = moment( pushB );
 
-					expect( test1.diff( new moment(base), 'y' ) ).toBe( 0 );
+					expect( test1.diff( moment(base), 'y' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'years' ) ).toBe( dateDiff( 'yyyy', base, pushA ) );
 					expect( test1.diff( test2, 'year'  ) ).toBe( dateDiff( 'yyyy', base, pushA ) );
 					expect( test1.diff( test2, 'y'     ) ).toBe( dateDiff( 'yyyy', base, pushA ) );
@@ -402,11 +415,11 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var pushA = dateAdd('q', 5, base );
 					var pushB = dateAdd('q', -5, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
+					var test1 = moment( base );
+					var test2 = moment( pushA );
+					var test3 = moment( pushB );
 
-					expect( test1.diff( new moment(base), 'q' ) ).toBe( 0 );
+					expect( test1.diff( moment(base), 'q' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'quarters' ) ).toBe( dateDiff( 'q', base, pushA ) );
 					expect( test1.diff( test2, 'quarter'  ) ).toBe( dateDiff( 'q', base, pushA ) );
 					expect( test1.diff( test2, 'q'        ) ).toBe( dateDiff( 'q', base, pushA ) );
@@ -419,11 +432,11 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var pushA = dateAdd('m', 5, base );
 					var pushB = dateAdd('m', -5, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
+					var test1 = moment( base );
+					var test2 = moment( pushA );
+					var test3 = moment( pushB );
 
-					expect( test1.diff( new moment(base), 'm' ) ).toBe( 0 );
+					expect( test1.diff( moment(base), 'm' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'months' ) ).toBe( dateDiff( 'm', base, pushA ) );
 					expect( test1.diff( test2, 'month'  ) ).toBe( dateDiff( 'm', base, pushA ) );
 					expect( test1.diff( test2, 'm'      ) ).toBe( dateDiff( 'm', base, pushA ) );
@@ -436,11 +449,11 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var pushA = dateAdd('ww', 5, base );
 					var pushB = dateAdd('ww', -5, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
+					var test1 = moment( base );
+					var test2 = moment( pushA );
+					var test3 = moment( pushB );
 
-					expect( test1.diff( new moment(base), 'w' ) ).toBe( 0 );
+					expect( test1.diff( moment(base), 'w' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'weeks' ) ).toBe( dateDiff( 'ww', base, pushA ) );
 					expect( test1.diff( test2, 'week'  ) ).toBe( dateDiff( 'ww', base, pushA ) );
 					expect( test1.diff( test2, 'w'     ) ).toBe( dateDiff( 'ww', base, pushA ) );
@@ -453,11 +466,11 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var pushA = dateAdd('m', 5, base );
 					var pushB = dateAdd('m', -5, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
+					var test1 = moment( base );
+					var test2 = moment( pushA );
+					var test3 = moment( pushB );
 
-					expect( test1.diff( new moment(base), 'd' ) ).toBe( 0 );
+					expect( test1.diff( moment(base), 'd' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'days' ) ).toBe( dateDiff( 'd', base, pushA ) );
 					expect( test1.diff( test2, 'day'  ) ).toBe( dateDiff( 'd', base, pushA ) );
 					expect( test1.diff( test2, 'd'    ) ).toBe( dateDiff( 'd', base, pushA ) );
@@ -470,11 +483,11 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var pushA = dateAdd('w', 5, base );
 					var pushB = dateAdd('w', -5, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
+					var test1 = moment( base );
+					var test2 = moment( pushA );
+					var test3 = moment( pushB );
 
-					expect( test1.diff( new moment(base), 'w' ) ).toBe( 0 );
+					expect( test1.diff( moment(base), 'w' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'weekdays' ) ).toBe( dateDiff( 'w', base, pushA ) );
 					expect( test1.diff( test2, 'weekday'  ) ).toBe( dateDiff( 'w', base, pushA ) );
 					expect( test1.diff( test2, 'wd'       ) ).toBe( dateDiff( 'w', base, pushA ) );
@@ -487,11 +500,11 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var pushA = dateAdd('h', 5, base );
 					var pushB = dateAdd('h', -5, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
+					var test1 = moment( base );
+					var test2 = moment( pushA );
+					var test3 = moment( pushB );
 
-					expect( test1.diff( new moment(base), 'h' ) ).toBe( 0 );
+					expect( test1.diff( moment(base), 'h' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'hours' ) ).toBe( dateDiff( 'h', base, pushA ) );
 					expect( test1.diff( test2, 'hour'  ) ).toBe( dateDiff( 'h', base, pushA ) );
 					expect( test1.diff( test2, 'h'     ) ).toBe( dateDiff( 'h', base, pushA ) );
@@ -504,11 +517,11 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var pushA = dateAdd('n', 5, base );
 					var pushB = dateAdd('n', -5, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
+					var test1 = moment( base );
+					var test2 = moment( pushA );
+					var test3 = moment( pushB );
 
-					expect( test1.diff( new moment(base), 'n' ) ).toBe( 0 );
+					expect( test1.diff( moment(base), 'n' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'minutes' ) ).toBe( dateDiff( 'n', base, pushA ) );
 					expect( test1.diff( test2, 'minute'  ) ).toBe( dateDiff( 'n', base, pushA ) );
 					expect( test1.diff( test2, 'n'       ) ).toBe( dateDiff( 'n', base, pushA ) );
@@ -521,11 +534,11 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var pushA = dateAdd('s', 5, base );
 					var pushB = dateAdd('s', -5, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
+					var test1 = moment( base );
+					var test2 = moment( pushA );
+					var test3 = moment( pushB );
 
-					expect( test1.diff( new moment(base), 's' ) ).toBe( 0 );
+					expect( test1.diff( moment(base), 's' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'seconds' ) ).toBe( dateDiff( 's', base, pushA ) );
 					expect( test1.diff( test2, 'second'  ) ).toBe( dateDiff( 's', base, pushA ) );
 					expect( test1.diff( test2, 's'       ) ).toBe( dateDiff( 's', base, pushA ) );
@@ -538,11 +551,11 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var pushA = dateAdd('l', 5, base );
 					var pushB = dateAdd('l', -5, base );
-					var test1 = new moment( base );
-					var test2 = new moment( pushA );
-					var test3 = new moment( pushB );
+					var test1 = moment( base );
+					var test2 = moment( pushA );
+					var test3 = moment( pushB );
 
-					expect( test1.diff( new moment(base), 'ms' ) ).toBe( 0 );
+					expect( test1.diff( moment(base), 'ms' ) ).toBe( 0 );
 					expect( test1.diff( test2, 'milliseconds' ) ).toBe( pushA.getTime() - base.getTime() );
 					expect( test1.diff( test2, 'millisecond'  ) ).toBe( pushA.getTime() - base.getTime() );
 					expect( test1.diff( test2, 'ms'           ) ).toBe( pushA.getTime() - base.getTime() );
@@ -555,7 +568,7 @@ component extends="testbox.system.BaseSpec"{
 
 			describe("getZoneOffset()", function(){
 				it("returns the offset in seconds (considering DST) of the specified zone", function(){
-					var test = new moment( now(), 'America/New_York' );
+					var test = moment( now(), 'America/New_York' );
 					var dst = test.isDST();
 					expect( test.getZoneOffset( 'America/New_York' ) ).toBe( dst ? -14400 : -18000 );
 				});
@@ -567,7 +580,7 @@ component extends="testbox.system.BaseSpec"{
 
 			describe("getZoneTable()", function(){
 				it("returns a struct", function(){
-					var tbl = new moment().getZoneTable();
+					var tbl = moment().getZoneTable();
 					expect( tbl ).toBeStruct();
 					expect( tbl ).notToBeEmpty();
 				});
@@ -582,27 +595,27 @@ component extends="testbox.system.BaseSpec"{
 					var base = now();
 					var mask = 'yyyy-mm-dd hh:nn:sstt';
 					var compare = dateTimeFormat(base, mask);
-					var test = new moment( base );
+					var test = moment( base );
 
 					expect( test.format( mask ) ).toBe( compare );
 				});
 				it("works with the mysql mask", function(){
 					var base = now();
 					var compare = dateTimeFormat( base, 'yyyy-mm-dd HH:nn:ss' );
-					var test = new moment( base );
+					var test = moment( base );
 
 					expect( test.format( 'mysql' )).toBe( compare );
 				});
 				it("works with the mssql mask", function(){
 					var base = now();
 					var compare = dateTimeFormat(base, 'yyyy-mm-dd') & 'T' & dateTimeFormat(base, 'HH:nn:ss') & 'Z';
-					var test = new moment( base );
+					var test = moment( base );
 					expect( test.format( 'mssql' )).toBe( compare );
 				});
 			});
 
 			describe("from()", function(){
-				var base = new moment();
+				var base = moment();
 
 				it("detects multiple years", function(){
 					var test = base.clone().add( 3, 'years' ).add( 3, 'weeks' );
@@ -683,31 +696,31 @@ component extends="testbox.system.BaseSpec"{
 
 			describe("epoch()", function(){
 				it("gets the correct epoch from a EST time", function(){
-					var test = new moment( '2008-11-27', 'America/New_York' );
+					var test = moment( '2008-11-27', 'America/New_York' );
 					expect( test.epoch() ).toBe( 1227762000000 );
 				});
 
 				it("gets the correct epoch from a EDT time", function(){
-					var test = new moment( '2015-03-20', 'America/New_York' );
+					var test = moment( '2015-03-20', 'America/New_York' );
 					expect( test.epoch() ).toBe( 1426824000000 );
 				});
 
 				it("gets the correct epoch from a UTC time", function(){
-					var test = new moment( '2015-03-20', 'UTC' );
+					var test = moment( '2015-03-20', 'UTC' );
 					expect( test.epoch() ).toBe( 1426824000000 );
 				});
 			});
 
 			describe("getDateTime()", function(){
 				it("returns a native time object", function(){
-					var test = new moment();
+					var test = moment();
 					expect( left( test.getDateTime(), 3) ).toBe( '{ts' );
 				});
 			});
 
 			describe("getZone()", function(){
 				it("returns a string", function(){
-					var test = new moment();
+					var test = moment();
 					expect( test.getZone() ).toBeString();
 					expect( test.getZone() ).notToBeEmpty();
 				});
@@ -716,7 +729,7 @@ component extends="testbox.system.BaseSpec"{
 			describe("getCurrentOffset()", function(){
 				it("returns the correct offset", function(){
 					//this may be troublesome if tested in another zone... we'll see!
-					var test = new moment( now(), 'America/New_York' );
+					var test = moment( now(), 'America/New_York' );
 					var dst = test.isDST();
 					expect( test.getCurrentOffset() ).toBe( dst ? -14400 : -18000 );
 				});
@@ -727,7 +740,7 @@ component extends="testbox.system.BaseSpec"{
 		describe("QUERY", function(){
 
 			describe("isBefore", function(){
-				var base = new moment();
+				var base = moment();
 				var clone = base.clone();
 				var test = base.clone().add(10, 'years');
 
@@ -758,7 +771,7 @@ component extends="testbox.system.BaseSpec"{
 			});
 
 			describe("isAfter", function(){
-				var base = new moment();
+				var base = moment();
 				var clone = base.clone();
 				var test = base.clone().subtract(10, 'years');
 
@@ -789,7 +802,7 @@ component extends="testbox.system.BaseSpec"{
 			});
 
 			describe("isSame", function(){
-				var base = new moment();
+				var base = moment();
 
 				it("works when cloned", function(){
 					var clone = base.clone();
@@ -806,9 +819,9 @@ component extends="testbox.system.BaseSpec"{
 			});
 
 			describe("isBetween", function(){
-				var x = new moment('2001-09-11');
-				var y = new moment('2008-11-27');
-				var z = new moment('2015-01-01');
+				var x = moment('2001-09-11');
+				var y = moment('2008-11-27');
+				var z = moment('2015-01-01');
 
 				it("works on true", function(){
 					expect( y.isBetween( x, z ) ).toBeTrue();

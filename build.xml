@@ -11,7 +11,7 @@
 
   <!-- you should change this value to a short name for your project
     will be used a symlink so shouldn't contain spaces -->
-  <property name="test.project" value="momentcfc" />
+  <property name="test.project" value="moment.cfc" />
 
   <!-- these properties can either be passed in from your build server
     (recommended), or set here if you're sure about that -->

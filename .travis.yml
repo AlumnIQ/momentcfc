@@ -14,5 +14,10 @@ env:
     # - PLATFORM=acf10-linux64 TESTFRAMEWORK=mxunit
     # - PLATFORM=acf902-linux64 TESTFRAMEWORK=mxunit
 
+before_install:
+    - echo 'Canada/Pacific' | sudo tee /etc/timezone
+    - sudo dpkg-reconfigure --frontend noninteractive tzdata
+    - sudo ntpdate ntp.ubuntu.com
+
 install: ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM install-ci-deps
 script: ant -Dtest.framework=$TESTFRAMEWORK -Dsource=remote -Dwork.dir=$HOME/work -Dbuild.dir=$TRAVIS_BUILD_DIR -Dplatform=$PLATFORM test-ci

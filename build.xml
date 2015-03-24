@@ -39,7 +39,7 @@
   <property name="acf902-linux64.local.url" value="/opt/ci/cf902-linux64.tar.gz" />
 
   <!-- test frameworks -->
-  <property name="testbox.local.url" value="/opt/ci/testbox_1.1.0.zip" />
+  <property name="testbox.local.url" value="/opt/ci/testbox_2.1.0.zip" />
   <property name="mxunit.local.url" value="/opt/ci/fix-railo-nulls.zip" />
 
   <!-- Remote URLs -->

@@ -10,7 +10,11 @@ component extends="testbox.system.BaseSpec" {
 				try {
 					return new momentcfc.moment(argumentCollection=arguments);
 				} catch(any e) {
-					throw(message="can't find moment!");
+					try {
+						return new demo.momentcfc.moment(argumentCollection=arguments);
+					} catch(any e) {
+						throw(message="can't find moment!");
+					}
 				}
 			}
 		};

@@ -85,7 +85,7 @@ component displayname="moment" {
 		if (part == 'L'){ //custom support for millisecond diffing... because adobe couldn't be bothered to support it themselves
 			return b.epoch() - this.epoch();
 		}
-		return dateDiff( part, variables.utcTime, b.clone().utc().getDateTime() );
+		return dateDiff( part, this.getDateTime(), b.getDateTime() );
 	}
 
 	public function getZoneCurrentOffset( required string zone ) hint="returns the offset in seconds (considering DST) of the specified zone" {

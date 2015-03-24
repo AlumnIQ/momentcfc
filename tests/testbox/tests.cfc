@@ -575,9 +575,6 @@ component extends="testbox.system.BaseSpec" {
 					var expectedOffset = m.isDST() ? offset4h : offset5h;
 
 					expect( m.getZoneCurrentOffset( 'America/New_York' ) ).toBe( expectedOffset );
-
-					debug( m.getDateTime(), 'before-convert' );
-					debug( m.utc().getDateTime(), 'after-convert' );
 				});
 			});
 

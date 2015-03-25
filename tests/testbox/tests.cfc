@@ -599,6 +599,43 @@ component extends="testbox.system.BaseSpec" {
 		describe("TERMINATORS", function(){
 
 			describe("format()", function(){
+				it("formats standard masks correctly across time zones", function(){
+					var testZones = [
+						{
+							zone: 'Asia/Hong_Kong'
+							,short: 'CTT'
+						}
+						,{
+							zone: 'America/Los_Angeles'
+							,short: 'PST'
+						}
+					];
+
+					//these dates + times were chosen to have leading zeros in all applicable places, as well as being in and out of DST
+					var timeNoDST = '2009-03-05 09:03:07';
+					var timeDST = '2009-03-09 09:03:07';
+
+					for(var z in testZones){
+						var test = moment( timeNoDST, z.zone );
+						debug( test );
+
+						//basic date and time fields; these could easily pass through to dateTimeFormat
+						expect( test.format('yyyy') ).toBe( '2009' );
+						expect( test.format('yy') ).toBe( '09' );
+						expect( test.format('mmmm') ).toBe( 'March' );
+						expect( test.format('mmm') ).toBe( 'Mar' );
+						expect( test.format('mm') ).toBe( '03' );
+						expect( test.format('m') ).toBe( '3' );
+						expect( test.format('EEEE') ).toBe( 'Thursday' );
+						expect( test.format('EEE') ).toBe( 'Thu' );
+						expect( test.format('dd') ).toBe( '05' );
+						expect( test.format('d') ).toBe( '5' );
+						//more to come here...
+
+						//now check formattings with time zones
+						expect( test.format('long') ).toBe( 'March 5, 2009 9:03:07 AM #z.short#' );
+					}
+				});
 				it("works for custom masks", function(){
 					var base = now();
 					var mask = 'yyyy-mm-dd hh:nn:sstt';

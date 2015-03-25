@@ -11,9 +11,9 @@
 */
 component displayname="moment" {
 
-	variables.zone = '';
-	variables.time = '';
-	variables.utcTime = '';
+	this.zone = '';
+	this.time = '';
+	this.utcTime = '';
 
 	/*
 		Call:
@@ -25,9 +25,9 @@ component displayname="moment" {
 				-- for instance initialized to someTimeValue in someTZID TZ
 	*/
 	public function init( time = now(), zone = getSystemTZ() ) {
-		variables.time = (time contains '{ts') ? time : parseDateTime( arguments.time );
-		variables.zone = zone;
-		variables.utcTime = TZtoUTC( arguments.time, arguments.zone );
+		this.time = (time contains '{ts') ? time : parseDateTime( arguments.time );
+		this.zone = zone;
+		this.utcTime = TZtoUTC( arguments.time, arguments.zone );
 		return this;
 	}
 
@@ -36,21 +36,21 @@ component displayname="moment" {
 	//===========================================
 
 	public function utc() hint="convert datetime to utc zone" {
-		variables.time = variables.utcTime;
-		variables.zone = 'UTC';
+		this.time = this.utcTime;
+		this.zone = 'UTC';
 		return this;
 	}
 
 	public function tz( required string zone ) hint="convert datetime to specified zone" {
-		variables.time = UTCtoTZ( variables.utcTime, arguments.zone );
-		variables.zone = arguments.zone;
+		this.time = UTCtoTZ( this.utcTime, arguments.zone );
+		this.zone = arguments.zone;
 		return this;
 	}
 
 	public function add( required numeric amount, required string part ){
 		part = canonicalizeDatePart( part, 'dateAdd' );
-		variables.time = dateAdd( part, amount, variables.time );
-		variables.utcTime = TZtoUTC( variables.time, variables.zone );
+		this.time = dateAdd( part, amount, this.time );
+		this.utcTime = TZtoUTC( this.time, this.zone );
 		return this;
 	}
 
@@ -63,7 +63,7 @@ component displayname="moment" {
 	//===========================================
 
 	public moment function clone() hint="returns a new instance with the same time & zone" {
-		return new moment( variables.time, variables.zone );
+		return new moment( this.time, this.zone );
 	}
 
 	public moment function min( required moment a, required moment b ) hint="returns whichever moment came first" {
@@ -126,16 +126,16 @@ component displayname="moment" {
 				break;
 			case 'iso8061':
 			case 'mssql':
-				return dateTimeFormat(variables.time, 'yyyy-mm-dd') & 'T' & dateTimeFormat(variables.time, 'HH:nn:ss') & 'Z';
+				return dateTimeFormat(this.time, 'yyyy-mm-dd') & 'T' & dateTimeFormat(this.time, 'HH:nn:ss') & 'Z';
 			default:
 				mask = mask;
 		}
 
-		return dateTimeFormat( variables.time, mask );
+		return dateTimeFormat( this.time, mask );
 	}
 
 	public function from( required moment compare ) hint="returns fuzzy-date string e.g. 2 hours ago" {
-		var _moment = new moment( variables.utcTime, 'UTC' );
+		var _moment = new moment( this.utcTime, 'UTC' );
 		var L = this.min( _moment, compare.clone().utc() ).getDateTime();
 		var R = this.max( _moment, compare.clone().utc() ).getDateTime();
 		var diff = 0;
@@ -187,15 +187,15 @@ component displayname="moment" {
 	}
 
 	public function getDateTime() hint="return raw datetime object in current zone" {
-		return variables.time;
+		return this.time;
 	}
 
 	public string function getZone() hint="return the current zone" {
-		return variables.zone;
+		return this.zone;
 	}
 
 	public numeric function getOffset() hint="returns the offset in seconds (considering DST) of the current moment" {
-		return getArbitraryTimeOffset( variables.time, variables.zone );
+		return getArbitraryTimeOffset( this.time, this.zone );
 	}
 
 	//===========================================
@@ -204,17 +204,17 @@ component displayname="moment" {
 
 	public boolean function isBefore( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
-		return (dateCompare( variables.utcTime, compare.clone().utc().getDateTime(), part ) == -1);
+		return (dateCompare( this.utcTime, compare.clone().utc().getDateTime(), part ) == -1);
 	}
 
 	public boolean function isSame( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
-		return (dateCompare( variables.utcTime, compare.clone().utc().getDateTime(), part ) == 0);
+		return (dateCompare( this.utcTime, compare.clone().utc().getDateTime(), part ) == 0);
 	}
 
 	public boolean function isAfter( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
-		return (dateCompare( variables.utcTime, compare.clone().utc().getDateTime(), part ) == 1);
+		return (dateCompare( this.utcTime, compare.clone().utc().getDateTime(), part ) == 1);
 	}
 
 	public boolean function isBetween( required moment a, required moment c, part = 'seconds' ) {
@@ -224,7 +224,7 @@ component displayname="moment" {
 
 	public boolean function isDST() {
 		var dt = createObject('java', 'java.util.Date').init( this.epoch() );
-		return getTZ( variables.zone ).inDayLightTime( dt );
+		return getTZ( this.zone ).inDayLightTime( dt );
 	}
 
 	//===========================================

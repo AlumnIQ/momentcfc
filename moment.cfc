@@ -204,17 +204,17 @@ component displayname="moment" {
 
 	public boolean function isBefore( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
-		return (dateCompare( this.utcTime, compare.clone().utc().getDateTime(), part ) == -1);
+		return (dateCompare( this.time, compare.getDateTime(), part ) == -1);
 	}
 
 	public boolean function isSame( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
-		return (dateCompare( this.utcTime, compare.clone().utc().getDateTime(), part ) == 0);
+		return (dateCompare( this.time, compare.getDateTime(), part ) == 0);
 	}
 
 	public boolean function isAfter( required moment compare, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
-		return (dateCompare( this.utcTime, compare.clone().utc().getDateTime(), part ) == 1);
+		return (dateCompare( this.time, compare.getDateTime(), part ) == 1);
 	}
 
 	public boolean function isBetween( required moment a, required moment c, part = 'seconds' ) {

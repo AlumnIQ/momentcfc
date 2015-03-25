@@ -363,15 +363,15 @@ component extends="testbox.system.BaseSpec" {
 			describe("min()", function(){
 
 				it("works with winner on left", function(){
-					var a = moment().subtract(1, 'day');
-					var b = moment();
+					var a = moment();
+					var b = a.clone().add(1, 'day');
 
 					expect( b.min( a, b ) ).toBe( a );
 				});
 
 				it("works with winner on right", function(){
-					var a = moment().subtract(1, 'day');
-					var b = moment();
+					var a = moment();
+					var b = a.clone().add(1, 'day');
 
 					expect( b.min( b, a ) ).toBe( a );
 				});
@@ -381,15 +381,15 @@ component extends="testbox.system.BaseSpec" {
 			describe("max()", function(){
 
 				it("works with winner on left", function(){
-					var a = moment().add(1, 'day');
-					var b = moment();
+					var a = moment();
+					var b = a.clone().subtract(1, 'day');
 
 					expect( b.min( a, b ) ).toBe( a );
 				});
 
 				it("works with winner on right", function(){
-					var a = moment().add(1, 'day');
-					var b = moment();
+					var a = moment();
+					var b = a.clone().subtract(1, 'day');
 
 					expect( b.min( b, a ) ).toBe( a );
 				});

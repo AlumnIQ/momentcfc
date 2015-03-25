@@ -138,9 +138,9 @@ component displayname="moment" {
 	}
 
 	public function from( required moment compare ) hint="returns fuzzy-date string e.g. 2 hours ago" {
-		var _moment = new moment( this.utcTime, 'UTC' );
-		var L = this.min( _moment, compare.clone().utc() ).getDateTime();
-		var R = this.max( _moment, compare.clone().utc() ).getDateTime();
+		var base = this.clone().utc();
+		var L = this.min( base, compare.clone().utc() ).getDateTime();
+		var R = this.max( base, compare.clone().utc() ).getDateTime();
 		var diff = 0;
 		//Seconds
 		if (dateDiff('s', L, R) < 60){

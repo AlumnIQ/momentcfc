@@ -703,19 +703,22 @@ component extends="testbox.system.BaseSpec" {
 			});
 
 			describe("epoch()", function(){
-				it("gets the correct epoch from a EST time", function(){
-					var test = moment( '2008-11-27', 'America/New_York' );
-					expect( test.epoch() ).toBe( 1227762000000 );
+				it("gets the correct epoch from a PST time", function(){
+					var zone = 'America/Los_Angeles';
+					var test = moment( '2008-11-27 6:06', zone );
+					expect( test.epoch() ).toBe( 1227794760000 );
 				});
 
 				it("gets the correct epoch from a EDT time", function(){
-					var test = moment( '2015-03-20', 'America/New_York' );
+					var zone = 'America/New_York';
+					var test = moment( '2015-03-20', zone );
 					expect( test.epoch() ).toBe( 1426824000000 );
 				});
 
 				it("gets the correct epoch from a UTC time", function(){
-					var test = moment( '2015-03-20', 'UTC' );
-					expect( test.epoch() ).toBe( 1426824000000 );
+					var zone = 'UTC';
+					var test = moment( '2015-03-20', zone );
+					expect( test.epoch() ).toBe( 1426809600000 );
 				});
 			});
 

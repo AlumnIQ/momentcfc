@@ -27,6 +27,11 @@ component displayname="moment" {
 	public function init( time = now(), zone = getSystemTZ() ) {
 		this.time = (time contains '{ts') ? time : parseDateTime( arguments.time );
 		this.zone = zone;
+
+		var systemOffset = getArbitraryTimeOffset( time, getSystemTZ() );
+		var targetOffset = getArbitraryTimeOffset( time, zone );
+		this.utc_conversion_offset = (targetOffset - systemOffset) * 1000;
+
 		this.utcTime = TZtoUTC( arguments.time, arguments.zone );
 		return this;
 	}
@@ -183,7 +188,13 @@ component displayname="moment" {
 	}
 
 	public function epoch() hint="returns the number of milliseconds since 1/1/1970 (local). Call .utc() first to get utc epoch" {
-		return variables.time.getTime();
+		/*
+			It seems that we can't get CF to give us an actual UTC datetime object without using DateConvert(), which we
+			can not rely on, because it depends on the system time being the local time converting from/to. Instead, we've
+			devised a system of detecting the target time zone's offset and using it here (the only place it seems necessary)
+			to return the expected epoch values.
+		*/
+		return this.clone().getDateTime().getTime() - this.utc_conversion_offset;
 	}
 
 	public function getDateTime() hint="return raw datetime object in current zone" {

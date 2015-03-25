@@ -4,7 +4,7 @@
 	Inspired by (but not a strict port of) moment.js: http://momentjs.com/
 	With help from: @seancorfield, @ryanguill
 	And contributions (witting or otherwise) from:
-	 - Dan Switzer: https://github.com/CounterMarch/moment.cfc/issues/5
+	 - Dan Switzer: https://github.com/CounterMarch/momentcfc/issues/5
 	 - Ryan Heldt: http://www.ryanheldt.com/post.cfm/working-with-fuzzy-dates-and-times
 	 - Ben Nadel: http://www.bennadel.com/blog/2501-converting-coldfusion-date-time-values-into-iso-8601-time-strings.htm
 	 - Zack Pitts: http://stackoverflow.com/a/16309780/751
@@ -110,7 +110,7 @@ component displayname="moment" {
 		return data;
 	}
 
-	public function getArbitraryTimeOffset( time, zone ) hint="returns what the offset was at that specific moment"{
+	public function getArbitraryTimeOffset( required time, required string zone ) hint="returns what the offset was at that specific moment"{
 		var timezone = getTZ( zone );
 		//can't use a moment for this math b/c it would cause infinite recursion: constructor uses this method
 		var epic = createDateTime(1970, 1, 1, 0, 0, 0);

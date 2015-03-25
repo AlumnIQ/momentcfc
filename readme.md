@@ -22,8 +22,8 @@ CFML is all about making complex things simple, but date-math seems to have miss
 The constructor takes 0, 1, or 2 arguments.
 
 - `new moment()` Use the current system time and the current system time zone
-- `new moment( now() )` Use the specified time (argument) and the current system time zone
-- `new moment( now(), 'America/Pacific' )` Use the specified time (argument) and the specified time zone (argument)
+- `new moment( now() )` Use the specified time and the current system time zone
+- `new moment( now(), 'America/Pacific' )` Use the specified time and the specified time zone
 
 The datetime argument accepts a native CFML datetime object (e.g. `now()` or `createDateTime()`) or just a string (e.g. `2008-11-27 13:47`).
 

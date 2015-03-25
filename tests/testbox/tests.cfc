@@ -384,14 +384,14 @@ component extends="testbox.system.BaseSpec" {
 					var a = moment();
 					var b = a.clone().subtract(1, 'day');
 
-					expect( b.min( a, b ) ).toBe( a );
+					expect( b.max( a, b ) ).toBe( a );
 				});
 
 				it("works with winner on right", function(){
 					var a = moment();
 					var b = a.clone().subtract(1, 'day');
 
-					expect( b.min( b, a ) ).toBe( a );
+					expect( b.max( b, a ) ).toBe( a );
 				});
 
 			});

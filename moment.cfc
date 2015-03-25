@@ -27,11 +27,7 @@ component displayname="moment" {
 	public function init( time = now(), zone = getSystemTZ() ) {
 		this.time = (time contains '{ts') ? time : parseDateTime( arguments.time );
 		this.zone = zone;
-
-		var systemOffset = getArbitraryTimeOffset( time, getSystemTZ() );
-		var targetOffset = getArbitraryTimeOffset( time, zone );
-		this.utc_conversion_offset = (targetOffset - systemOffset) * 1000;
-
+		this.utc_conversion_offset = getTargetOffsetDiff( getSystemTZ(), zone, time );
 		this.utcTime = TZtoUTC( arguments.time, arguments.zone );
 		return this;
 	}
@@ -47,6 +43,8 @@ component displayname="moment" {
 	}
 
 	public function tz( required string zone ) hint="convert datetime to specified zone" {
+		// this.utc_conversion_offset = getZoneCurrentOffset( arguments.zone ) * 1000;
+		this.utc_conversion_offset = getTargetOffsetDiff( getSystemTZ(), zone, this.time );
 		this.time = UTCtoTZ( this.utcTime, arguments.zone );
 		this.zone = arguments.zone;
 		return this;
@@ -195,6 +193,9 @@ component displayname="moment" {
 			to return the expected epoch values.
 		*/
 		return this.clone().getDateTime().getTime() - this.utc_conversion_offset;
+		var adjustment = (this.utc_conversion_offset > 0) ? -1 : 1;
+		return this.clone().getDateTime().getTime();
+		return this.clone().getDateTime().getTime() - (this.utc_conversion_offset * adjustment);
 	}
 
 	public function getDateTime() hint="return raw datetime object in current zone" {
@@ -321,6 +322,12 @@ component displayname="moment" {
 				throw(message='#method# doesn''t support Millisecond precision');
 		}
 		throw(message='Unrecognized Date Part: `#part#`');
+	}
+
+	private function getTargetOffsetDiff( sourceTZ, destTZ, time ) hint="used to calculate what the custom offset should be, based on current target and new target"{
+		var startOffset = getArbitraryTimeOffset( time, sourceTZ );
+		var targetOffset = getArbitraryTimeOffset( time, destTZ );
+		return (targetOffset - startOffset) * 1000;
 	}
 
 }

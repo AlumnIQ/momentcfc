@@ -720,6 +720,16 @@ component extends="testbox.system.BaseSpec" {
 					var test = moment( '2015-03-20', zone );
 					expect( test.epoch() ).toBe( 1426809600000 );
 				});
+
+				it("is still correct if you change the target TZ after initialization", function(){
+					var startzone = 'America/Los_Angeles';
+					var newzone = 'Asia/Hong_Kong';
+					var m = moment( '2008-11-27 6:06', startzone );
+					expect( m.epoch() ).toBe( 1227794760000 );
+					m.tz( newzone );
+					expect( m.epoch() ).toBe( 1227794760000 );
+					expect( m.format('yyyy-mm-dd HH:nn') ).toBe( '2008-11-27 22:06' );
+				});
 			});
 
 			describe("getDateTime()", function(){

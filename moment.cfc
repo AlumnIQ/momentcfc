@@ -127,7 +127,7 @@ component displayname="moment" {
 			case 'mysql':
 				mask = 'yyyy-mm-dd HH:nn:ss';
 				break;
-			case 'iso8061':
+			case 'iso8601':
 			case 'mssql':
 				return dateTimeFormat(this.time, 'yyyy-mm-dd') & 'T' & dateTimeFormat(this.time, 'HH:nn:ss') & 'Z';
 			default:

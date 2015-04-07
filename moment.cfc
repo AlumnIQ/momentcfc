@@ -181,7 +181,7 @@ component displayname="moment" {
 	}
 
 	public function fromNow() {
-		var nnow = new moment().clone().utc().getDateTime();
+		var nnow = new moment().clone().utc();
 		return from( nnow );
 	}
 

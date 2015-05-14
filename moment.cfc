@@ -14,6 +14,7 @@ component displayname="moment" {
 	this.zone = '';
 	this.time = '';
 	this.utcTime = '';
+	this.localTime = '';
 
 	/*
 		Call:
@@ -29,6 +30,7 @@ component displayname="moment" {
 		this.zone = zone;
 		this.utc_conversion_offset = getTargetOffsetDiff( getSystemTZ(), zone, time );
 		this.utcTime = TZtoUTC( arguments.time, arguments.zone );
+		this.localTime = UTCtoTZ( this.utcTime, getSystemTZ() );
 		return this;
 	}
 
@@ -134,7 +136,7 @@ component displayname="moment" {
 				mask = mask;
 		}
 
-		return dateTimeFormat( this.time, mask );
+		return dateTimeFormat( this.localTime, mask, this.zone );
 	}
 
 	public function from( required moment compare ) hint="returns fuzzy-date string e.g. 2 hours ago" {

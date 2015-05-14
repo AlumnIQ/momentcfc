@@ -603,37 +603,54 @@ component extends="testbox.system.BaseSpec" {
 					var testZones = [
 						{
 							zone: 'Asia/Hong_Kong'
-							,short: 'CTT'
+							,short: 'HKT'
+							,shortDST: 'HKT'
 						}
 						,{
 							zone: 'America/Los_Angeles'
 							,short: 'PST'
+							,shortDST: 'PDT'
 						}
 					];
 
 					//these dates + times were chosen to have leading zeros in all applicable places, as well as being in and out of DST
+					//2009 DST was May 8 to Nov 1
 					var timeNoDST = '2009-03-05 09:03:07';
 					var timeDST = '2009-03-09 09:03:07';
 
 					for(var z in testZones){
-						var test = moment( timeNoDST, z.zone );
-						debug( test );
+						var testNoDST = moment( timeNoDST, z.zone );
+						var testDST = moment( timeDST, z.zone );
+						debug( testNoDST );
+						debug( testDST );
 
 						//basic date and time fields; these could easily pass through to dateTimeFormat
-						expect( test.format('yyyy') ).toBe( '2009' );
-						expect( test.format('yy') ).toBe( '09' );
-						expect( test.format('mmmm') ).toBe( 'March' );
-						expect( test.format('mmm') ).toBe( 'Mar' );
-						expect( test.format('mm') ).toBe( '03' );
-						expect( test.format('m') ).toBe( '3' );
-						expect( test.format('EEEE') ).toBe( 'Thursday' );
-						expect( test.format('EEE') ).toBe( 'Thu' );
-						expect( test.format('dd') ).toBe( '05' );
-						expect( test.format('d') ).toBe( '5' );
+						expect( testNoDST.format('yyyy') ).toBe( '2009' );
+						expect( testNoDST.format('yy') ).toBe( '09' );
+						expect( testNoDST.format('mmmm') ).toBe( 'March' );
+						expect( testNoDST.format('mmm') ).toBe( 'Mar' );
+						expect( testNoDST.format('mm') ).toBe( '03' );
+						expect( testNoDST.format('m') ).toBe( '3' );
+						expect( testNoDST.format('EEEE') ).toBe( 'Thursday' );
+						expect( testNoDST.format('EEE') ).toBe( 'Thu' );
+						expect( testNoDST.format('dd') ).toBe( '05' );
+						expect( testNoDST.format('d') ).toBe( '5' );
+
+						expect( testDST.format('yyyy') ).toBe( '2009' );
+						expect( testDST.format('yy') ).toBe( '09' );
+						expect( testDST.format('mmmm') ).toBe( 'March' );
+						expect( testDST.format('mmm') ).toBe( 'Mar' );
+						expect( testDST.format('mm') ).toBe( '03' );
+						expect( testDST.format('m') ).toBe( '3' );
+						expect( testDST.format('EEEE') ).toBe( 'Monday' );
+						expect( testDST.format('EEE') ).toBe( 'Mon' );
+						expect( testDST.format('dd') ).toBe( '09' );
+						expect( testDST.format('d') ).toBe( '9' );
 						//more to come here...
 
 						//now check formattings with time zones
-						expect( test.format('long') ).toBe( 'March 5, 2009 9:03:07 AM #z.short#' );
+						expect( testNoDST.format('long') ).toBe( 'March 5, 2009 9:03:07 AM #z.short#' );
+						expect( testDST.format('long') ).toBe( 'March 9, 2009 9:03:07 AM #z.shortDST#' );
 					}
 				});
 				it("works for custom masks", function(){

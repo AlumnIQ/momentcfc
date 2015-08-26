@@ -46,7 +46,7 @@ component displayname="moment" {
 
 	public function tz( required string zone ) hint="convert datetime to specified zone" {
 		// this.utc_conversion_offset = getZoneCurrentOffset( arguments.zone ) * 1000;
-		this.utc_conversion_offset = getTargetOffsetDiff( getSystemTZ(), zone, this.time );
+		this.utc_conversion_offset = getTargetOffsetDiff( getSystemTZ(), this.zone, this.time );
 		this.time = UTCtoTZ( this.utcTime, arguments.zone );
 		this.zone = arguments.zone;
 		return this;

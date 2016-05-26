@@ -14,7 +14,6 @@ component displayname="moment" {
 	this.zone = '';
 	this.time = '';
 	this.utcTime = '';
-	this.localTime = '';
 
 	/*
 		Call:
@@ -30,7 +29,6 @@ component displayname="moment" {
 		this.zone = zone;
 		this.utc_conversion_offset = getTargetOffsetDiff( getSystemTZ(), zone, time );
 		this.utcTime = TZtoUTC( arguments.time, arguments.zone );
-		this.localTime = UTCtoTZ( this.utcTime, getSystemTZ() );
 		return this;
 	}
 
@@ -46,7 +44,7 @@ component displayname="moment" {
 
 	public function tz( required string zone ) hint="convert datetime to specified zone" {
 		// this.utc_conversion_offset = getZoneCurrentOffset( arguments.zone ) * 1000;
-		this.utc_conversion_offset = getTargetOffsetDiff( getSystemTZ(), this.zone, this.time );
+		this.utc_conversion_offset = getTargetOffsetDiff( getSystemTZ(), zone, this.time );
 		this.time = UTCtoTZ( this.utcTime, arguments.zone );
 		this.zone = arguments.zone;
 		return this;
@@ -61,6 +59,47 @@ component displayname="moment" {
 
 	public function subtract( required numeric amount, required string part ){
 		return add( -1 * amount, part );
+	}
+
+	public function startOf( required string part ){
+		part = canonicalizeDatePart(part, "startOf");
+
+		switch (part){
+			case 'year':
+				this.time = createDateTime(year(this.time),1,day(this.time),hour(this.time),minute(this.time),second(this.time));
+			case 'quarter':
+			case 'month':
+				this.time = createDateTime(year(this.time),month(this.time),1,hour(this.time),minute(this.time),second(this.time));
+			case 'week':
+			case 'day':
+				this.time = createDateTime(year(this.time),month(this.time),day(this.time),0,minute(this.time),second(this.time));
+			case 'hour':
+				this.time = createDateTime(year(this.time),month(this.time),day(this.time),hour(this.time),0,second(this.time));
+			case 'minute':
+				this.time = createDateTime(year(this.time),month(this.time),day(this.time),hour(this.time),minute(this.time),0);
+		}
+
+		// weeks are a special case
+		if (part is "week"){
+			this.time = dateAdd("d",(dayOfWeek(this.time)-1)*-1,this.time);
+		}
+
+		// quarters are also special
+		if (part is "quarter"){
+			this.time = createDateTime(year(this.time),int(month(this.time)/3)*3+1,day(this.time),hour(this.time),minute(this.time),second(this.time));
+		}
+
+		return this;
+	}
+
+	public function endOf(required string part) {
+		part = canonicalizeDatePart(part, "startOf");
+
+		if (part is "millisecond"){
+			return this;
+		}
+
+		return this.startOf(part).add(1,part).subtract(1,"ms");
 	}
 
 	//===========================================
@@ -136,7 +175,7 @@ component displayname="moment" {
 				mask = mask;
 		}
 
-		return dateTimeFormat( this.localTime, mask, this.zone );
+		return dateTimeFormat( this.time, mask );
 	}
 
 	public function from( required moment compare ) hint="returns fuzzy-date string e.g. 2 hours ago" {
@@ -167,7 +206,7 @@ component displayname="moment" {
 		diff = dateDiff('ww', L, R);
 		if (diff == 1){
 			return 'Last week';
-		}else if (diff lte 4){
+		}else if (diff lt 4){
 			return diff & ' weeks ago';
 		}
 		//Months/Years
@@ -275,29 +314,35 @@ component displayname="moment" {
 		var isDateAdd = (lcase(method) == 'dateadd');
 		var isDateDiff = (lcase(method) == 'datediff');
 		var isDateCompare = (lcase(method) == 'datecompare');
+		var isStartOf = (lcase(method) == 'startof');
 
 		switch( lcase(arguments.part) ){
 			case 'years':
 			case 'year':
 			case 'y':
+				if (isStartOf) return 'year';
 				return 'yyyy';
 			case 'quarters':
 			case 'quarter':
 			case 'q':
+				if (isStartOf) return 'quarter';
 				if (!isDateCompare) return 'q';
 				throw(message='DateCompare doesn''t support Quarter precision');
 			case 'months':
 			case 'month':
 			case 'm':
+				if (isStartOf) return 'month';
 				return 'm';
 			case 'weeks':
 			case 'week':
 			case 'w':
+				if (isStartOf) return 'week';
 				if (!isDateCompare) return 'ww';
 				throw(message='DateCompare doesn''t support Week precision');
 			case 'days':
 			case 'day':
 			case 'd':
+				if (isStartOf) return 'day';
 				return 'd';
 			case 'weekdays':
 			case 'weekday':
@@ -307,18 +352,22 @@ component displayname="moment" {
 			case 'hours':
 			case 'hour':
 			case 'h':
+				if (isStartOf) return 'hour';
 				return 'h';
 			case 'minutes':
 			case 'minute':
 			case 'n':
+				if (isStartOf) return 'minute';
 				return 'n';
 			case 'seconds':
 			case 'second':
 			case 's':
+				if (isStartOf) return 'second';
 				return 's';
 			case 'milliseconds':
 			case 'millisecond':
 			case 'ms':
+				if (isStartOf) return 'millisecond';
 				if (isDateAdd) return 'L';
 				if (isDateDiff) return 'L'; //custom support for ms diffing is provided interally, because adobe sucks
 				throw(message='#method# doesn''t support Millisecond precision');

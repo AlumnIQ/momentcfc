@@ -53,7 +53,35 @@ component extends="testbox.system.BaseSpec" {
 		});
 
 		describe("MUTATORS", function(){
+			
+			describe("startOf()", function(){
+				it("supports masks: year, quarter, month, week, day and minute", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
+					
+					expect( start.startOf("year").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-01-01 00:00:00" );
+					expect( start.startOf("quarter").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-01-01 00:00:00" );
+					expect( start.startOf("month").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-01 00:00:00" );
+					expect( start.startOf("week").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-01-31 00:00:00" );
+					expect( start.startOf("day").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 00:00:00" );
+					expect( start.startOf("hour").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 00:00:00" );
+					expect( start.startOf("minute").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 00:05:00" );
+				});
+			});
+			
+			describe("endOf()", function(){
+				it("supports masks: year, quarter, month, week, day and minute", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 
+					expect( start.endOf("year").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-12-31 23:59:59" );
+					expect( start.endOf("quarter").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-03-31 23:59:59" );
+					expect( start.endOf("month").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-29 23:59:59" );
+					expect( start.endOf("week").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-06 23:59:59" );
+					expect( start.endOf("day").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 23:59:59" );
+					expect( start.endOf("hour").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 00:59:59" );
+					expect( start.endOf("minute").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 00:05:59" );
+				});
+			});
+			
 			describe("utc()", function(){
 				it("correctly calculates the utc value", function(){
 					outsideDST = moment('2015-02-01 00:00:00', 'America/New_York').utc();

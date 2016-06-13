@@ -53,7 +53,7 @@ component extends="testbox.system.BaseSpec" {
 		});
 
 		describe("MUTATORS", function(){
-			
+
 			describe("utc()", function(){
 				it("correctly calculates the utc value", function(){
 					outsideDST = moment('2015-02-01 00:00:00', 'America/New_York').utc();
@@ -345,31 +345,65 @@ component extends="testbox.system.BaseSpec" {
 				});
 
 			});
-			
-			describe("startOf()", function(){
-				it("supports masks: year, quarter, month, week, day and minute", function(){
-					start = moment('2016-02-05 00:05:00', 'America/New_York');
 
+			describe("startOf()", function(){
+				it("supports masks: year", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.startOf("year").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-01-01 00:00:00" );
+				});
+				it("supports masks: quarter", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.startOf("quarter").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-01-01 00:00:00" );
+				});
+				it("supports masks: month", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.startOf("month").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-01 00:00:00" );
+				});
+				it("supports masks: week", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.startOf("week").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-01-31 00:00:00" );
+				});
+				it("supports masks: day", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.startOf("day").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 00:00:00" );
-					expect( start.startOf("hour").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 00:00:00" );
+				});
+				it("supports masks: hour", function(){
+					start = moment('2016-02-05 03:05:00', 'America/New_York');
+					expect( start.startOf("hour").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 03:00:00" );
+				});
+				it("supports masks: minute", function(){
+					start = moment('2016-02-05 00:05:17', 'America/New_York');
 					expect( start.startOf("minute").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 00:05:00" );
 				});
 			});
 
 			describe("endOf()", function(){
-				it("supports masks: year, quarter, month, week, day and minute", function(){
+				it("supports masks: year", function(){
 					start = moment('2016-02-05 00:05:00', 'America/New_York');
-
 					expect( start.endOf("year").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-12-31 23:59:59" );
+				});
+				it("supports masks: quarter", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.endOf("quarter").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-03-31 23:59:59" );
+				});
+				it("supports masks: month", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.endOf("month").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-29 23:59:59" );
+				});
+				it("supports masks: week", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.endOf("week").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-06 23:59:59" );
+				});
+				it("supports masks: day", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.endOf("day").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 23:59:59" );
+				});
+				it("supports masks: hour", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.endOf("hour").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 00:59:59" );
+				});
+				it("supports masks: minute", function(){
+					start = moment('2016-02-05 00:05:00', 'America/New_York');
 					expect( start.endOf("minute").format("yyyy-mm-dd HH:nn:ss") ).toBe( "2016-02-05 00:05:59" );
 				});
 			});
@@ -649,6 +683,7 @@ component extends="testbox.system.BaseSpec" {
 					for(var z in testZones){
 						var testNoDST = moment( timeNoDST, z.zone );
 						var testDST = moment( timeDST, z.zone );
+						debug( "Testing for: " & z.zone );
 						debug( testNoDST );
 						debug( testDST );
 
@@ -664,6 +699,15 @@ component extends="testbox.system.BaseSpec" {
 						expect( testNoDST.format('dd') ).toBe( '05' );
 						expect( testNoDST.format('d') ).toBe( '5' );
 
+						expect( testNoDST.format('h') ).toBe( '9' );
+						expect( testNoDST.format('hh') ).toBe( '09' );
+						expect( testNoDST.format('H') ).toBe( '9' );
+						expect( testNoDST.format('HH') ).toBe( '09' );
+						expect( testNoDST.format('n') ).toBe( '3' );
+						expect( testNoDST.format('nn') ).toBe( '03' );
+						expect( testNoDST.format('s') ).toBe( '7' );
+						expect( testNoDST.format('ss') ).toBe( '07' );
+
 						expect( testDST.format('yyyy') ).toBe( '2009' );
 						expect( testDST.format('yy') ).toBe( '09' );
 						expect( testDST.format('mmmm') ).toBe( 'March' );
@@ -674,7 +718,15 @@ component extends="testbox.system.BaseSpec" {
 						expect( testDST.format('EEE') ).toBe( 'Mon' );
 						expect( testDST.format('dd') ).toBe( '09' );
 						expect( testDST.format('d') ).toBe( '9' );
-						//more to come here...
+
+						expect( testDST.format('h') ).toBe( '9' );
+						expect( testDST.format('hh') ).toBe( '09' );
+						expect( testDST.format('H') ).toBe( '9' );
+						expect( testDST.format('HH') ).toBe( '09' );
+						expect( testDST.format('n') ).toBe( '3' );
+						expect( testDST.format('nn') ).toBe( '03' );
+						expect( testDST.format('s') ).toBe( '7' );
+						expect( testDST.format('ss') ).toBe( '07' );
 
 						//now check formattings with time zones
 						expect( testNoDST.format('long') ).toBe( 'March 5, 2009 9:03:07 AM #z.short#' );

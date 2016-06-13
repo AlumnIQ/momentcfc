@@ -62,48 +62,79 @@ component displayname="moment" {
 	public function subtract( required numeric amount, required string part ){
 		return add( -1 * amount, part );
 	}
-	
+
 	public function startOf( required string part ){
 		part = canonicalizeDatePart(part, "startOf");
+		var dest = '';
 
 		switch (part){
 			case 'year':
-				this.time = createDateTime(year(this.time),1,day(this.time),hour(this.time),minute(this.time),second(this.time));
+				dest = createDateTime(year(this.localTime),1,1,0,0,0);
+				break;
 			case 'quarter':
+				dest = createDateTime(year(this.localTime),(int((month(this.localTime)-1)/3)+1)*3-2,1,0,0,0);
+				break;
 			case 'month':
-				this.time = createDateTime(year(this.time),month(this.time),1,hour(this.time),minute(this.time),second(this.time));
+				dest = createDateTime(year(this.localTime),month(this.localTime),1,0,0,0);
+				break;
 			case 'week':
+				dest = createDateTime(year(this.localTime),month(this.localTime),day(this.localTime),0,0,0);
+				dest = dateAdd("d", (dayOfWeek(dest)-1)*-1, dest);
+				break;
 			case 'day':
-				this.time = createDateTime(year(this.time),month(this.time),day(this.time),0,minute(this.time),second(this.time));
+				dest = createDateTime(year(this.localTime),month(this.localTime),day(this.localTime),0,0,0);
+				break;
 			case 'hour':
-				this.time = createDateTime(year(this.time),month(this.time),day(this.time),hour(this.time),0,second(this.time));
+				dest = createDateTime(year(this.localTime),month(this.localTime),day(this.localTime),hour(this.localTime),0,0);
+				break;
 			case 'minute':
-				this.time = createDateTime(year(this.time),month(this.time),day(this.time),hour(this.time),minute(this.time),0);
+				dest = createDateTime(year(this.localTime),month(this.localTime),day(this.localTime),hour(this.localTime),minute(this.localTime),0);
+				break;
+			default:
+				throw(message="Invalid date part value, expected one of: year, quarter, month, week, day, hour, minute; or one of their acceptable aliases (see dateTimeFormat docs)");
 		}
 
-		// weeks are a special case
-		if (part is "week"){
-			this.time = dateAdd("d",(dayOfWeek(this.time)-1)*-1,this.time);
-		}
-
-		// quarters are also special
-		if (part is "quarter"){
-			this.time = createDateTime(year(this.time),int(month(this.time)/3)*3+1,day(this.time),hour(this.time),minute(this.time),second(this.time));
-		}
-
-		return this;
+		return init( dest, this.zone );
 	}
-	
+
 	public function endOf(required string part) {
 		part = canonicalizeDatePart(part, "startOf");
 
-		if (part is "millisecond"){
-			return this;
+		var dest = '';
+		switch (part){
+			case 'year':
+				dest = createDateTime(year(this.localTime),12,31,23,59,59);
+				break;
+			case 'quarter':
+				dest = createDateTime(year(this.localTime),(int((month(this.localTime)-1)/3)+1)*3,1,23,59,59); //first day of last month of quarter (e.g. 12/1)
+				dest = dateAdd('m', 1, dest); //first day of following month
+				dest = dateAdd('d', -1, dest); //last day of last month of quarter
+				break;
+			case 'month':
+				dest = createDateTime(year(this.localTime),month(this.localTime),1,23,59,59); //first day of month
+				dest = dateAdd('m', 1, dest); //first day of following month
+				dest = dateAdd('d', -1, dest); //last day of target month
+				break;
+			case 'week':
+				dest = createDateTime(year(this.localTime),month(this.localTime),day(this.localTime),23,59,59);
+				dest = dateAdd("d", (7-dayOfWeek(dest)), dest);
+				break;
+			case 'day':
+				dest = createDateTime(year(this.localTime),month(this.localTime),day(this.localTime),23,59,59);
+				break;
+			case 'hour':
+				dest = createDateTime(year(this.localTime),month(this.localTime),day(this.localTime),hour(this.localTime),59,59);
+				break;
+			case 'minute':
+				dest = createDateTime(year(this.localTime),month(this.localTime),day(this.localTime),hour(this.localTime),minute(this.localTime),59);
+				break;
+			default:
+				throw(message="Invalid date part value, expected one of: year, quarter, month, week, day, hour, minute; or one of their acceptable aliases (see dateTimeFormat docs)");
 		}
 
-		return this.startOf(part).add(1,part).subtract(1,"ms");
+		return init( dest, this.zone );
 	}
-	
+
 	//===========================================
 	//STATICS
 	//===========================================
@@ -177,7 +208,7 @@ component displayname="moment" {
 				mask = mask;
 		}
 
-		return dateTimeFormat( this.time, mask, this.zone );
+		return dateTimeFormat( this.localTime, mask, this.zone );
 	}
 
 	public function from( required moment compare ) hint="returns fuzzy-date string e.g. 2 hours ago" {

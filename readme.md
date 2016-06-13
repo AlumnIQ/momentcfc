@@ -53,13 +53,15 @@ Here's a list of all masks you can use with add/subtract:
 
 #### startOf / endOf
 
-Returns a new moment instance with the date/time shifted to the start or end of the specified date part. For example, the end of the current week:
+Returns a new moment instance with the date/time shifted to the start or end of the specified date part. For example, the end of the current week*:
 
 	endOfWeek = new moment().endOf('week');
 
 Or the start of the next quarter:
 
 	nextQuarter = new moment().startOf('quarter').add(1, 'quarter');
+
+**\* Weeks are assumed to be Sun-Sat**
 
 #### Clone
 

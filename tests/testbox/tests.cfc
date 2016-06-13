@@ -728,7 +728,7 @@ component extends="testbox.system.BaseSpec" {
 				it("detects single months", function(){
 					var test = base.clone().add( 1, 'months' ).add( 3, 'days' );
 					var test2 = base.clone().add( 1, 'months' ).subtract( 3, 'days' );
-					expect( test.from( base ) ).toBe( '1 month ago' );
+					expect( test.from( base ) ).toBe( '4 weeks ago' );
 				});
 
 				it("detects multiple weeks", function(){

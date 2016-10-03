@@ -175,6 +175,19 @@ After all is said and done, sometimes you just need the raw datetime object back
 	raw = new moment( '2008-11-27 13:47' ).getDateTime();
 	//=> {ts '2008-11-27 13:47:00'}
 
+#### year, month, day, hour, minute, second
+
+Read or write just the year portion of the moment. When updating, returns a new moment instance.
+
+	x = new moment();
+	x.year();
+	//=> returns the current year (numeric)
+
+	x.year( 2000 );
+	//=> returns a new moment with the date/time rewound to the same moment in the year 2000
+
+The same pattern repeats for each of the following methods: `year()`, `month()`, `day()`, `hour()`, `minute()`, `second()`. Execute it with no arguments to get the current value, or execute it with an appropriate argument value to return a new moment maching the same date and time except for the specified date-part modification.
+
 ## Time Zones
 
 In addition to all of the great date math you can do (with moment's better syntax), moment also has baked-in support for Time Zone functionality, using the robust underlying `java.util.TimeZone` class.

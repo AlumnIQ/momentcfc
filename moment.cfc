@@ -284,6 +284,72 @@ component displayname="moment" {
 		return getArbitraryTimeOffset( this.time, this.zone );
 	}
 
+	public function year( newYear = '' ){
+		if ( newYear == '' ){
+			return getDatePart( 'year' );
+		}else{
+			return init(
+				time: createDateTime( newYear, month(this.time), day(this.time), hour(this.time), minute(this.time), second(this.time) )
+				,zone: this.zone
+			);
+		}
+	}
+
+	public function month( newMonth = '' ){
+		if ( newMonth == '' ){
+			return getDatePart( 'month' );
+		}else{
+			return init(
+				time: createDateTime( year(this.time), newMonth, day(this.time), hour(this.time), minute(this.time), second(this.time) )
+				,zone: this.zone
+			);
+		}
+	}
+
+	public function day( newDay = '' ){
+		if ( newDay == '' ){
+			return getDatePart( 'day' );
+		}else{
+			return init(
+				time: createDateTime( year(this.time), month(this.time), newDay, hour(this.time), minute(this.time), second(this.time) )
+				,zone: this.zone
+			);
+		}
+	}
+
+	public function hour( newHour = '' ){
+		if ( newHour == '' ){
+			return getDatePart( 'hour' );
+		}else{
+			return init(
+				time: createDateTime( year(this.time), month(this.time), day(this.time), newHour, minute(this.time), second(this.time) )
+				,zone: this.zone
+			);
+		}
+	}
+
+	public function minute( newMinute = '' ){
+		if ( newMinute == '' ){
+			return getDatePart( 'minute' );
+		}else{
+			return init(
+				time: createDateTime( year(this.time), month(this.time), day(this.time), hour(this.time), newMinute, second(this.time) )
+				,zone: this.zone
+			);
+		}
+	}
+
+	public function second( newSecond = '' ){
+		if ( newSecond == '' ){
+			return getDatePart( 'second' );
+		}else{
+			return init(
+				time: createDateTime( year(this.time), month(this.time), day(this.time), hour(this.time), minute(this.time), newSecond )
+				,zone: this.zone
+			);
+		}
+	}
+
 	//===========================================
 	//QUERY
 	//===========================================
@@ -412,6 +478,10 @@ component displayname="moment" {
 		var startOffset = getArbitraryTimeOffset( time, sourceTZ );
 		var targetOffset = getArbitraryTimeOffset( time, destTZ );
 		return (targetOffset - startOffset) * 1000;
+	}
+
+	private function getDatePart( datePart ){
+		return val( format( canonicalizeDatePart( arguments.datePart ) ) );
 	}
 
 }

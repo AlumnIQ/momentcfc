@@ -889,6 +889,105 @@ component extends="testbox.system.BaseSpec" {
 				});
 			});
 
+			describe("year()", function(){
+				it("returns the current value when argument is empty", function(){
+					var d = moment('2015-03-20 00:00:00', 'America/New_York');
+					expect( d.year() ).toBe( 2015 );
+				});
+				it("returns an updated moment when argument is not empty", function(){
+					var d = moment('2015-03-20 00:00:00', 'America/New_York');
+					var test = d.year( 2014 );
+					expect( test ).toBeComponent();
+					expect( test.format('yyyy') ).toBe( 2014 );
+					expect( test.format('mm') ).toBe( 3 );
+					expect( test.format('dd') ).toBe( 20 );
+				});
+			});
+
+			describe("month()", function(){
+				it("returns the current value when argument is empty", function(){
+					var d = moment('2015-03-20 00:00:00', 'America/New_York');
+					expect( d.month() ).toBe( 3 );
+				});
+				it("returns an updated moment when argument is not empty", function(){
+					var d = moment('2015-03-20 00:00:00', 'America/New_York');
+					var test = d.month( 5 );
+					expect( test ).toBeComponent();
+					expect( test.format('yyyy') ).toBe( 2015 );
+					expect( test.format('mm') ).toBe( 5 );
+					expect( test.format('dd') ).toBe( 20 );
+				});
+			});
+
+			describe("day()", function(){
+				it("returns the current value when argument is empty", function(){
+					var d = moment('2015-03-20 00:00:00', 'America/New_York');
+					expect( d.day() ).toBe( 20 );
+				});
+				it("returns an updated moment when argument is not empty", function(){
+					var d = moment('2015-03-20 00:00:00', 'America/New_York');
+					var test = d.day( 7 );
+					expect( test ).toBeComponent();
+					expect( test.format('yyyy') ).toBe( 2015 );
+					expect( test.format('mm') ).toBe( 03 );
+					expect( test.format('dd') ).toBe( 7 );
+				});
+			});
+
+			describe("hour()", function(){
+				it("returns the current value when argument is empty", function(){
+					var d = moment('2015-03-20 09:00:00', 'America/New_York');
+					expect( d.hour() ).toBe( 9 );
+				});
+				it("returns an updated moment when argument is not empty", function(){
+					var d = moment('2015-03-20 09:10:11', 'America/New_York');
+					var test = d.hour( 13 );
+					expect( test ).toBeComponent();
+					expect( test.format('yyyy') ).toBe( 2015 );
+					expect( test.format('mm') ).toBe( 03 );
+					expect( test.format('dd') ).toBe( 20 );
+					expect( test.format('HH') ).toBe( 13 );
+					expect( test.format('nn') ).toBe( 10 );
+					expect( test.format('ss') ).toBe( 11 );
+				});
+			});
+
+			describe("minute()", function(){
+				it("returns the current value when argument is empty", function(){
+					var d = moment('2015-03-20 09:03:00', 'America/New_York');
+					expect( d.minute() ).toBe( 3 );
+				});
+				it("returns an updated moment when argument is not empty", function(){
+					var d = moment('2015-03-20 09:10:11', 'America/New_York');
+					var test = d.minute( 44 );
+					expect( test ).toBeComponent();
+					expect( test.format('yyyy') ).toBe( 2015 );
+					expect( test.format('mm') ).toBe( 03 );
+					expect( test.format('dd') ).toBe( 20 );
+					expect( test.format('HH') ).toBe( 09 );
+					expect( test.format('nn') ).toBe( 44 );
+					expect( test.format('ss') ).toBe( 11 );
+				});
+			});
+
+			describe("second()", function(){
+				it("returns the current value when argument is empty", function(){
+					var d = moment('2015-03-20 09:00:59', 'America/New_York');
+					expect( d.second() ).toBe( 59 );
+				});
+				it("returns an updated moment when argument is not empty", function(){
+					var d = moment('2015-03-20 09:10:11', 'America/New_York');
+					var test = d.second( 22 );
+					expect( test ).toBeComponent();
+					expect( test.format('yyyy') ).toBe( 2015 );
+					expect( test.format('mm') ).toBe( 03 );
+					expect( test.format('dd') ).toBe( 20 );
+					expect( test.format('HH') ).toBe( 9 );
+					expect( test.format('nn') ).toBe( 10 );
+					expect( test.format('ss') ).toBe( 22 );
+				});
+			});
+
 		});
 
 		describe("QUERY", function(){

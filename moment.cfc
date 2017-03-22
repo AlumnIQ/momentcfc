@@ -233,12 +233,19 @@ component displayname="moment" {
 		//Days
 		diff = dateDiff('d', L, R);
 		if (diff < 7){
-			return 'Last ' & dateTimeFormat(L, 'EEEE');
+
+			if(diff<2){
+
+				return 'Yesterday';
+			}
+			else if(7 > diff || diff >=2){
+				return '#diff# days ago';
+			}
 		}
 		//Weeks
 		diff = dateDiff('ww', L, R);
 		if (diff == 1){
-			return 'Last week';
+			return '1 week ago';
 		}else if (diff lte 4){
 			return diff & ' weeks ago';
 		}

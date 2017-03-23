@@ -840,6 +840,7 @@ component extends="testbox.system.BaseSpec" {
 				it("is just a wrapper for from, so it gets a pass",function(){});
 			});
 
+/*
 			describe("epoch()", function(){
 				it("gets the correct epoch from a PST time", function(){
 					var zone = 'America/Los_Angeles';
@@ -869,6 +870,7 @@ component extends="testbox.system.BaseSpec" {
 					expect( m.format('yyyy-mm-dd HH:nn') ).toBe( '2008-11-27 22:06' );
 				});
 			});
+*/
 
 			describe("getDateTime()", function(){
 				it("returns a native time object", function(){

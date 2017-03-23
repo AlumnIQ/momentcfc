@@ -233,13 +233,10 @@ component displayname="moment" {
 		//Days
 		diff = dateDiff('d', L, R);
 		if (diff < 7){
-
-			if(diff<2){
-
+			if (diff < 2){
 				return 'Yesterday';
-			}
-			else if(7 > diff || diff >=2){
-				return '#diff# days ago';
+			}else if (diff >= 2){
+				return diff & ' days ago';
 			}
 		}
 		//Weeks

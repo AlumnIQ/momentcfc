@@ -792,14 +792,18 @@ component extends="testbox.system.BaseSpec" {
 				it("detects single weeks", function(){
 					var test = base.clone().add( 1, 'weeks' ).add( 2, 'hours' );
 					var test2 = base.clone().add( 1, 'weeks' ).subtract( 2, 'hours' );
-					expect( test.from( base ) ).toBe( 'Last week' );
+					expect( test.from( base ) ).toBe( '1 week ago' );
 				});
 
 				it("detects days", function(){
 					var test = base.clone().add( 4, 'days' ).add( 2, 'hours' );
 					var test2 = base.clone().add( 4, 'days' ).subtract( 2, 'hours' );
-					expect( left(test.from( base ), 4) ).toBe( 'Last' );
-					expect( right(test.from( base ), 3) ).toBe( 'day' );
+					expect( test.from( base ) ).toBe( '4 days ago' );
+				});
+
+				it("detects yesterday", function(){
+					var test = base.clone().add( 1, 'days' ).add( 3, 'hours' ).subtract( 11, 'minutes' );
+					expect( test.from( base ) ).toBe( 'Yesterday' );
 				});
 
 				it("detects multiple hours", function(){

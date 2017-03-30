@@ -56,6 +56,7 @@ component displayname="moment" {
 		part = canonicalizeDatePart( part, 'dateAdd' );
 		this.time = dateAdd( part, amount, this.time );
 		this.utcTime = TZtoUTC( this.time, this.zone );
+		this.localTime = UTCtoTZ( this.utcTime, getSystemTZ() );
 		return this;
 	}
 

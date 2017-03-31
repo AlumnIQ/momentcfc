@@ -165,7 +165,7 @@ Determines if the current moment is between the two argument moments, at least t
 	x = new moment( '2008-11-27 06:30' );
 	y = new moment( '2008-11-27 13:47' );
 	z = new moment( '2011-01-01 06:06' );
-	betwixt = y.isBetween( y, 'minutes' );
+	betwixt = y.isBetween( x, z );
 	//=> true
 
 #### getDateTime
@@ -177,16 +177,16 @@ After all is said and done, sometimes you just need the raw datetime object back
 
 #### year, month, day, hour, minute, second
 
-Read or write just the year portion of the moment. When updating, returns a new moment instance.
+Read or write just one portion of the moment. Updates the moment instance in place.
 
 	x = new moment();
 	x.year();
 	//=> returns the current year (numeric)
 
 	x.year( 2000 );
-	//=> returns a new moment with the date/time rewound to the same moment in the year 2000
+	//=> updates the moment with the date/time rewound to the same moment in the year 2000 and returns it
 
-The same pattern repeats for each of the following methods: `year()`, `month()`, `day()`, `hour()`, `minute()`, `second()`. Execute it with no arguments to get the current value, or execute it with an appropriate argument value to return a new moment maching the same date and time except for the specified date-part modification.
+The same pattern repeats for each of the following methods: `year()`, `month()`, `day()`, `hour()`, `minute()`, `second()`. Execute it with no arguments to get the current value, or execute it with an appropriate argument value to update the moment instance.
 
 ## Time Zones
 

@@ -26,7 +26,11 @@ component displayname="moment" {
 				-- for instance initialized to someTimeValue in someTZID TZ
 	*/
 	public function init( time = now(), zone = getSystemTZ() ) {
-		this.time = (time contains '{ts') ? time : parseDateTime( arguments.time );
+		if (isNumeric(time))
+			this.time = epochToDate(arguments.time);
+		else
+			this.time = (time contains '{ts') ? time : parseDateTime( arguments.time );
+
 		this.zone = zone;
 		this.utc_conversion_offset = getTargetOffsetDiff( getSystemTZ(), zone, time );
 		this.utcTime = TZtoUTC( arguments.time, arguments.zone );
@@ -392,7 +396,17 @@ component displayname="moment" {
 	//===========================================
 	//INTERNAL HELPERS
 	//===========================================
+	
+	private function epochToDate( epoch ){
+		var d = "";
+		if (isValid("integer",arguments.epoch))
+			d = createObject("java","java.util.Date").init(javacast("long",arguments.epoch*1000));
+		else if (isNumeric(arguments.epoch) and val(arguments.epoch) gt 1000)
+			d = createObject("java","java.util.Date").init(javacast("long",arguments.epoch));
 
+		return d;
+	}
+	
 	private function getSystemTimeMS(){
 		return createObject('java', 'java.lang.System').currentTimeMillis();
 	}

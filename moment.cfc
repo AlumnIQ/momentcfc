@@ -376,7 +376,12 @@ component displayname="moment" {
 
 	public boolean function isBetween( required moment a, required moment c, part = 'seconds' ) {
 		part = canonicalizeDatePart( part, 'dateCompare' );
-		return ( isBefore(c, part) && isAfter(a, part) );
+		if ( isBefore(c, part) && isAfter(a, part) ){
+			return true;
+		}else if ( isBefore(a, part) && isAfter(c, part) ){
+			return true;
+		}
+		return false;
 	}
 
 	public boolean function isDST() {

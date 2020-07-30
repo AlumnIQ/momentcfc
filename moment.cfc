@@ -177,7 +177,7 @@ component displayname="moment" {
 	public struct function getZoneTable(){
 		var list = createObject('java', 'java.util.TimeZone').getAvailableIDs();
 		var data = {};
-		for (tz in list){
+		for (var tz in list){
 			//display *CURRENT* offsets
 			var ms = getTZ( tz ).getOffset( getSystemTimeMS() );
 			data[ tz ] = readableOffset( ms );
@@ -264,17 +264,17 @@ component displayname="moment" {
 		return from( nnow );
 	}
 
-	public function epoch() hint="returns the number of milliseconds since 1/1/1970 (local). Call .utc() first to get utc epoch" {
+	public numeric function epoch() hint="returns the number of milliseconds since 1/1/1970 (local). Call .utc() first to get utc epoch" {
 		/*
 			It seems that we can't get CF to give us an actual UTC datetime object without using DateConvert(), which we
 			can not rely on, because it depends on the system time being the local time converting from/to. Instead, we've
 			devised a system of detecting the target time zone's offset and using it here (the only place it seems necessary)
 			to return the expected epoch values.
 		*/
-		return this.clone().getDateTime().getTime() - this.utc_conversion_offset;
+		return javacast("bigdecimal",this.clone().getDateTime().getTime() - this.utc_conversion_offset);
 		var adjustment = (this.utc_conversion_offset > 0) ? -1 : 1;
-		return this.clone().getDateTime().getTime();
-		return this.clone().getDateTime().getTime() - (this.utc_conversion_offset * adjustment);
+		return javacast("bigdecimal",this.clone().getDateTime().getTime());
+		return javacast("bigdecimal",this.clone().getDateTime().getTime() - (this.utc_conversion_offset * adjustment));
 	}
 
 	public function getDateTime() hint="return raw datetime object in current zone" {
@@ -387,6 +387,10 @@ component displayname="moment" {
 	public boolean function isDST() {
 		var dt = createObject('java', 'java.util.Date').init( this.epoch() );
 		return getTZ( this.zone ).inDayLightTime( dt );
+	}
+
+	public date function epochTimeToDate(epoch) {
+		return createObject( "java", "java.util.Date" ).init( javaCast( "long", epoch ) );
 	}
 
 	//===========================================

@@ -177,7 +177,7 @@ component displayname="moment" {
 	public struct function getZoneTable(){
 		var list = createObject('java', 'java.util.TimeZone').getAvailableIDs();
 		var data = {};
-		for (tz in list){
+		for (var tz in list){
 			//display *CURRENT* offsets
 			var ms = getTZ( tz ).getOffset( getSystemTimeMS() );
 			data[ tz ] = readableOffset( ms );

@@ -462,7 +462,7 @@ component displayname="moment" {
 			case 'hour':
 			case 'h':
 				if (isStartOf) return 'hour';
-				return 'h';
+				return 'H';
 			case 'minutes':
 			case 'minute':
 			case 'n':
